@@ -1,0 +1,124 @@
+<div class="order-container">
+  <h2>Place Your Order</h2>
+
+  @if (!tailorId()) {
+    <p class="warning">No tailor selected — please go back and choose a tailor first.</p>
+  }
+
+  <form [formGroup]="orderForm" (ngSubmit)="onSubmit()">
+
+    <div>
+      <label>Garment Type</label>
+      <select formControlName="garmentType">
+        <option value="">-- Select Garment Type --</option>
+        @for (option of garmentTypes; track option) {
+          <option [value]="option">{{ option }}</option>
+        }
+      </select>
+      @if (orderForm.get('garmentType')?.invalid && orderForm.get('garmentType')?.touched) {
+        <p class="error-message">Please select a garment type.</p>
+      }
+    </div>
+
+    <div>
+      <label>Stitching Type</label>
+      <select formControlName="stitchingType">
+        <option value="">-- Select Stitching Type --</option>
+        @for (option of stitchingTypes; track option) {
+          <option [value]="option">{{ option }}</option>
+        }
+      </select>
+      @if (orderForm.get('stitchingType')?.invalid && orderForm.get('stitchingType')?.touched) {
+        <p class="error-message">Please select a stitching type.</p>
+      }
+    </div>
+
+    <div>
+      <label>Style</label>
+      <input type="text" formControlName="style" placeholder="e.g. Anarkali, A-line, Straight cut">
+      @if (orderForm.get('style')?.invalid && orderForm.get('style')?.touched) {
+        <p class="error-message">Please describe the style.</p>
+      }
+    </div>
+
+    <div>
+      <label>Expected Delivery</label>
+      <input type="date" formControlName="expectedDelivery">
+      @if (orderForm.get('expectedDelivery')?.invalid && orderForm.get('expectedDelivery')?.touched) {
+        <p class="error-message">Please pick an expected delivery date.</p>
+      }
+    </div>
+
+    <div class="section-divider">Garment Details (optional)</div>
+
+    <div>
+      <label>Occasion</label>
+      <input type="text" formControlName="occasion" placeholder="Wedding, party, everyday wear...">
+    </div>
+
+    <div>
+      <label>Neck Design</label>
+      <input type="text" formControlName="neckDesign" placeholder="Round, V-neck, boat neck...">
+    </div>
+
+    <div>
+      <label>Sleeve Type</label>
+      <input type="text" formControlName="sleeveType" placeholder="Full sleeve, half sleeve, sleeveless...">
+    </div>
+
+    <div>
+      <label>Fit</label>
+      <select formControlName="fit">
+        <option value="">-- Select Fit --</option>
+        @for (option of fitOptions; track option) {
+          <option [value]="option">{{ option }}</option>
+        }
+      </select>
+    </div>
+
+    <div>
+      <label>Fabric</label>
+      <input type="text" formControlName="fabric" placeholder="Cotton, silk, georgette...">
+    </div>
+
+    <div>
+      <label>Fabric Color</label>
+      <input type="text" formControlName="fabricColor" placeholder="e.g. Maroon">
+    </div>
+
+    <div class="checkbox-row">
+      <input type="checkbox" id="embroidery" formControlName="embroidery">
+      <label for="embroidery">Embroidery work needed</label>
+    </div>
+
+    <div>
+      <label>Additional Description</label>
+      <textarea formControlName="description" placeholder="Anything else the tailor should know"></textarea>
+    </div>
+
+    @if (errorMessage()) {
+      <p class="error-message">{{ errorMessage() }}</p>
+    }
+
+    <button type="submit" [disabled]="submitting()">
+      {{ submitting() ? 'Placing Order…' : 'Place Order' }}
+    </button>
+
+  </form>
+</div>
+
+<!-- Success popup -->
+@if (orderPlaced()) {
+  <div class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-icon">🧵</div>
+      <h3>Order Placed!</h3>
+      <p>Your order has been sent to the tailor. They'll review it and confirm the details with you shortly.</p>
+
+      <div class="modal-actions">
+        <button class="modal-cta" (click)="goToOrders()">View My Orders</button>
+        <button class="modal-secondary" (click)="browseMoreTailors()">Browse More Tailors</button>
+      </div>
+    </div>
+  </div>
+}

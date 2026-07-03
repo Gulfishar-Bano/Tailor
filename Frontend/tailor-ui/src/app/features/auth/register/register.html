@@ -1,0 +1,83 @@
+<div class="register-container">
+
+  <h2>Create Account</h2>
+
+ <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+ 
+
+  
+<div>
+  <label>Register As</label>
+
+  <select formControlName="role">
+    <option value="customer">Customer</option>
+    <option value="tailor">Tailor</option>
+  </select>
+</div>
+
+    <div>
+      <label>Name</label>
+   <input type="text" formControlName="name">
+    </div>
+
+    <div>
+      <label>Email</label>
+      <input type="email" formControlName="email">
+    </div>
+
+    <div>
+      <label>Phone</label>
+      <input type="text" formControlName="phone">
+    </div>
+
+    <div>
+      <label>Password</label>
+      <input type="password" formControlName="password">
+    </div>
+
+    @if (registerForm.get('role')?.value === 'tailor') {
+
+  <div>
+    <label>Experience (Years)</label>
+    <input type="number" formControlName="experience">
+  </div>
+
+  <div>
+    <label>City</label>
+    <input type="text" formControlName="city">
+  </div>
+
+ <div>
+  <label>Specialization</label>
+
+  <select formControlName="specialization">
+    <option value="">-- Select Specialization --</option>
+    <option value="Blouse">Blouse</option>
+    <option value="Kurti">Kurti</option>
+    <option value="Salwar Suit">Salwar Suit</option>
+    <option value="Lehenga">Lehenga</option>
+    <option value="Bridal Wear">Bridal Wear</option>
+    <option value="Men's Shirt">Men's Shirt</option>
+    <option value="Men's Pant">Men's Pant</option>
+    <option value="Coat & Suit">Coat & Suit</option>
+    <option value="Kids Wear">Kids Wear</option>
+    <option value="Alteration">Alteration</option>
+    <option value="All Types">All Types</option>
+  </select>
+</div>
+
+  <div>
+    <label>Bio</label>
+    <textarea formControlName="bio"></textarea>
+  </div>
+
+}
+
+    <button type="submit">
+      Register
+    </button>
+
+  </form>
+
+</div>

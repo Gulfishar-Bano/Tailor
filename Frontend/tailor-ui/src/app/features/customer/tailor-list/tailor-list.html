@@ -1,0 +1,56 @@
+<div class="container">
+  <h2>Available Tailors</h2>
+
+  @for (tailor of tailors(); track tailor._id) {
+    <div class="card">
+      <div>
+        <h3>{{ tailor.name }}</h3>
+        <p><strong>Email</strong>{{ tailor.email }}</p>
+        <p><strong>Phone</strong>{{ tailor.phone }}</p>
+      </div>
+      <button (click)="openProfile(tailor)">View Profile</button>
+    </div>
+  } @empty {
+    <p>No tailors found or data hasn't loaded yet.</p>
+  }
+</div>
+
+<!-- Profile modal -->
+@if (selectedTailor(); as tailor) {
+  <div class="modal-backdrop" (click)="closeProfile()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <button class="modal-close" (click)="closeProfile()" aria-label="Close">✕</button>
+
+      <div class="modal-avatar">{{ tailor.name?.charAt(0) }}</div>
+      <h3>{{ tailor.name }}</h3>
+
+      <div class="modal-details">
+        <p><strong>Email</strong>{{ tailor.email }}</p>
+        <p><strong>Phone</strong>{{ tailor.phone }}</p>
+
+        <!-- these render only if your API starts returning them for tailors -->
+        @if (tailor.specialization) {
+          <p><strong>Specialization</strong>{{ tailor.specialization }}</p>
+        }
+        @if (tailor.experience) {
+          <p><strong>Experience</strong>{{ tailor.experience }} yrs</p>
+        }
+        @if (tailor.city) {
+          <p><strong>City</strong>{{ tailor.city }}</p>
+        }
+        @if (tailor.bio) {
+          <p class="modal-bio">{{ tailor.bio }}</p>
+        }
+      </div>
+
+      <!-- adjust the route to wherever your order-placement flow actually lives -->
+      <button
+        class="modal-cta"
+        [routerLink]="['/customer/order/new']"
+        [queryParams]="{ tailorId: tailor._id }"
+      >
+        Place Order
+      </button>
+    </div>
+  </div>
+}

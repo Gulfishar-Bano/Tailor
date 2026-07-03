@@ -1,0 +1,137 @@
+<div class="dashboard-page">
+
+  <!-- ===================== Top nav ===================== -->
+  <header class="top-nav">
+    <div class="brand">
+      <span class="brand-mark">🧵</span>
+      <span class="brand-name">Tailor Connect</span>
+    </div>
+
+    <nav class="nav-links">
+      <a routerLink="/customer/dashboard" routerLinkActive="active" class="active">Dashboard</a>
+      <a routerLink="/customer/orders" routerLinkActive="active">Orders</a>
+      <a routerLink="/customer/measurements" routerLinkActive="active">Measurements</a>
+      <a routerLink="/customer/profile" routerLinkActive="active">Profile</a>
+    </nav>
+
+    <!-- swap {{ userInitials }} / {{ userName }} for your real auth data -->
+    <div class="user-chip">
+      <span class="avatar">{{ userInitials || 'G' }}</span>
+      <span class="user-name">{{ userName || 'Gulfisha' }}</span>
+    </div>
+  </header>
+
+  <!-- ===================== Hero ===================== -->
+  <section class="hero">
+    <span class="eyebrow">Customer dashboard</span>
+    <h1>Welcome back, {{ userName || 'Gulfisha' }} 👋</h1>
+    <p>Your measurements are saved and your last order is on track — what would you like to do today?</p>
+    <button class="cta" routerLink="/customer/tailors">Find a Tailor</button>
+
+    <!-- bind these to real values from your order/measurement services -->
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-value">{{ activeOrders || 2 }}</span>
+        <span class="stat-label">Active Orders</span>
+      </div>
+      <span class="stat-divider"></span>
+      <div class="stat">
+        <span class="stat-value">{{ savedMeasurements || 3 }}</span>
+        <span class="stat-label">Saved Measurements</span>
+      </div>
+      <span class="stat-divider"></span>
+      <div class="stat">
+        <span class="stat-value">{{ favoriteTailors || 5 }}</span>
+        <span class="stat-label">Favorite Tailors</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Quick actions — flowing list, not boxed cards ===================== -->
+  <section class="actions">
+    <div class="section-head">
+      <span class="eyebrow">Quick actions</span>
+      <h2>What would you like to do today?</h2>
+    </div>
+
+    <div class="action-list">
+
+      <a class="action-row" routerLink="/customer/tailors">
+        <span class="action-icon">🧵</span>
+        <div class="action-copy">
+          <h3>Find Tailors</h3>
+          <p>Browse experienced tailors based on ratings, experience and previous work.</p>
+        </div>
+        <span class="action-arrow">→</span>
+      </a>
+
+      <a class="action-row" routerLink="/customer/orders">
+        <span class="action-icon">📦</span>
+        <div class="action-copy">
+          <h3>My Orders</h3>
+          <p>View your active and completed stitching orders.</p>
+        </div>
+        <span class="action-arrow">→</span>
+      </a>
+
+      <a class="action-row" routerLink="/customer/measurements">
+        <span class="action-icon">📏</span>
+        <div class="action-copy">
+          <h3>Saved Measurements</h3>
+          <p>Save body measurements for faster future orders.</p>
+        </div>
+        <span class="action-arrow">→</span>
+      </a>
+
+      <a class="action-row" routerLink="/customer/profile">
+        <span class="action-icon">👤</span>
+        <div class="action-copy">
+          <h3>My Profile</h3>
+          <p>Update your profile, address and contact details.</p>
+        </div>
+        <span class="action-arrow">→</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ===================== Recent orders ===================== -->
+  <!-- replace with *ngFor over your real orders list -->
+  <section class="recent">
+    <div class="section-head">
+      <span class="eyebrow">Recent activity</span>
+      <h2>Latest orders</h2>
+    </div>
+
+    <div class="order-list">
+      <div class="order-row">
+        <div class="order-main">
+          <span class="order-title">Bridal Lehenga — Meera Tailors</span>
+          <span class="order-date">Placed 28 Jun 2026</span>
+        </div>
+        <span class="status status-active">In Progress</span>
+      </div>
+
+      <div class="order-row">
+        <div class="order-main">
+          <span class="order-title">Men's Formal Shirt — Rajesh Stitching Co.</span>
+          <span class="order-date">Placed 21 Jun 2026</span>
+        </div>
+        <span class="status status-pending">Pending Fitting</span>
+      </div>
+
+      <div class="order-row">
+        <div class="order-main">
+          <span class="order-title">Kurti Set — Ananya Designs</span>
+          <span class="order-date">Delivered 10 Jun 2026</span>
+        </div>
+        <span class="status status-done">Completed</span>
+      </div>
+    </div>
+  </section>
+
+  <footer class="dash-footer">
+    <span>Tailor Connect — stitched with care since 2026</span>
+  </footer>
+
+</div>
