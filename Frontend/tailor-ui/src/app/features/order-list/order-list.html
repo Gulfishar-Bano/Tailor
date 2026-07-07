@@ -1,0 +1,32 @@
+<app-navbar></app-navbar>
+
+<div class="orders-page">
+  <div class="page-head">
+    <h2>My Orders</h2>
+    <a routerLink="/customer/tailors" class="browse-link">+ Place another order</a>
+  </div>
+
+  @if (loading()) {
+    <p class="info-text">Loading your orders…</p>
+  } @else if (errorMessage()) {
+    <p class="error-text">{{ errorMessage() }}</p>
+  } @else if (orders().length === 0) {
+    <div class="empty-state">
+      <p>You haven't placed any orders yet.</p>
+      <a routerLink="/customer/tailors" class="cta-link">Find a Tailor</a>
+    </div>
+  } @else {
+    <div class="order-list">
+      @for (order of orders(); track order._id) {
+        <div class="order-row">
+          <div class="order-main">
+            <span class="order-title">{{ order.garmentType }} — {{ order.tailorName }}</span>
+            <span class="order-sub">{{ order.stitchingType }} · {{ order.style }}</span>
+            <span class="order-date">Expected delivery: {{ order.expectedDelivery | date: 'mediumDate' }}</span>
+          </div>
+          <span class="status" [ngClass]="statusClass(order.status)">{{ order.status }}</span>
+        </div>
+      }
+    </div>
+  }
+</div>

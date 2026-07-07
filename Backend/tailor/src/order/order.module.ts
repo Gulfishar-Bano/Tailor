@@ -5,6 +5,7 @@ import { OrderController } from './order.controller';
 import { OrderService } from './order.service';
 
 import { Order, OrderSchema } from './schema/order.schema';
+import { User, UserSchema } from '../user/schema/user.schema'; // TODO: adjust to your actual User schema path/name
 
 @Module({
   imports: [
@@ -12,6 +13,12 @@ import { Order, OrderSchema } from './schema/order.schema';
       {
         name: Order.name,
         schema: OrderSchema,
+      },
+    ]),
+    MongooseModule.forFeature([
+      {
+        name: User.name,
+        schema: UserSchema,
       },
     ]),
   ],

@@ -1,0 +1,378 @@
+/* ==========================================================================
+   Tailor Connect — Tailor Profile
+   Same atelier language: linen background, muslin cards, saffron/wine/navy
+   thread accents, dashed stitch dividers.
+   ========================================================================== */
+
+:host {
+  --linen:          #EDE6D8;
+  --muslin:         #FBF8F2;
+  --ink:            #2A2420;
+  --ink-soft:       #6B6255;
+  --thread-navy:    #2F4156;
+  --thread-saffron: #C98A2B;
+  --thread-wine:    #7C2D3A;
+  --seam:           #C3B8A3;
+  --error:          #9A3B3B;
+
+  display: block;
+  min-height: 100vh;
+  font-family: 'Work Sans', -apple-system, sans-serif;
+  color: var(--ink);
+  background: var(--linen);
+}
+
+.profile-page {
+  width: 80%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 3.5rem 0 5rem;
+}
+
+.info-text, .error-text, .empty-text {
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+}
+.error-text { color: var(--error); }
+
+// ---------------------------------------------------------------------------
+// Hero
+// ---------------------------------------------------------------------------
+
+.profile-hero {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px dashed var(--seam);
+  margin-bottom: 2rem;
+}
+
+.avatar {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--thread-saffron);
+  color: var(--muslin);
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: 1.8rem;
+  text-transform: uppercase;
+}
+
+.hero-info {
+  flex: 1;
+  min-width: 0;
+
+  h1 {
+    margin: 0 0 0.4rem;
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: 1.7rem;
+    color: var(--thread-navy);
+  }
+}
+
+.rating-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.stars span, .review-stars span {
+  color: var(--seam);
+  font-size: 0.95rem;
+
+  &.filled { color: var(--thread-saffron); }
+}
+
+.rating-text {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.review-count { margin-left: 0.25rem; }
+
+.meta-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--thread-wine);
+
+  span:not(:last-child)::after {
+    content: '·';
+    margin-left: 0.75rem;
+    color: var(--seam);
+  }
+}
+
+.place-order-btn {
+  flex-shrink: 0;
+  padding: 0.7rem 1.4rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--thread-saffron);
+  color: var(--muslin);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+
+  &:hover { background: var(--thread-wine); transform: translateY(-1px); }
+}
+
+// ---------------------------------------------------------------------------
+// Bio
+// ---------------------------------------------------------------------------
+
+.bio-section {
+  margin-bottom: 2.5rem;
+
+  p {
+    font-style: italic;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Section heading shared style
+// ---------------------------------------------------------------------------
+
+h2 {
+  margin: 0 0 1.25rem;
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: var(--thread-navy);
+}
+
+// ---------------------------------------------------------------------------
+// Portfolio grid
+// ---------------------------------------------------------------------------
+
+.portfolio-section { margin-bottom: 3rem; }
+
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.9rem;
+}
+
+.portfolio-item {
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 6px;
+  border: 1px solid var(--seam);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover img { transform: scale(1.05); }
+}
+
+// ---------------------------------------------------------------------------
+// Review CTA
+// ---------------------------------------------------------------------------
+
+.review-cta-section {
+  margin-bottom: 2.5rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--muslin);
+  border: 1px dashed var(--seam);
+  border-radius: 6px;
+
+  p { margin: 0 0 0.75rem; font-size: 0.9rem; color: var(--ink-soft); }
+}
+
+.review-cta-btn {
+  display: block;
+  width: 100%;
+  padding: 0.6rem;
+  margin-top: 0.5rem;
+  border: 1px solid var(--thread-wine);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--thread-wine);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+
+  &:hover { background: var(--thread-wine); color: var(--muslin); }
+}
+
+// ---------------------------------------------------------------------------
+// Reviews list
+// ---------------------------------------------------------------------------
+
+.reviews-section { margin-bottom: 1rem; }
+
+.review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.review-card {
+  padding: 1.1rem 1.3rem;
+  background: var(--muslin);
+  border: 1px solid var(--seam);
+  border-radius: 6px;
+}
+
+.review-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+}
+
+.review-name {
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.review-comment {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+// ---------------------------------------------------------------------------
+// Leave-a-review modal
+// ---------------------------------------------------------------------------
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: rgba(42, 36, 32, 0.45);
+  backdrop-filter: blur(2px);
+}
+
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  padding: 2.25rem 2rem;
+  background: var(--muslin);
+  border-radius: 6px;
+  box-shadow: 0 24px 48px -16px rgba(42, 36, 32, 0.4);
+
+  h3 {
+    margin: 0 0 1.25rem;
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--thread-navy);
+    text-align: center;
+  }
+}
+
+.modal-close {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: var(--linen);
+  color: var(--ink-soft);
+  cursor: pointer;
+
+  &:hover { background: var(--seam); color: var(--ink); }
+}
+
+.star-picker {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+  font-size: 1.6rem;
+}
+
+.pickable-star {
+  color: var(--seam);
+  cursor: pointer;
+  transition: color 0.15s ease, transform 0.15s ease;
+
+  &.filled { color: var(--thread-saffron); }
+  &:hover { transform: scale(1.15); }
+}
+
+textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 0.65rem 0.85rem;
+  margin-bottom: 1.25rem;
+  background: var(--linen);
+  border: 1px solid var(--seam);
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-family: 'Work Sans', sans-serif;
+  font-size: 0.9rem;
+  color: var(--ink);
+  resize: vertical;
+
+  &:focus {
+    outline: none;
+    border-color: var(--thread-saffron);
+    box-shadow: 0 0 0 3px rgba(201, 138, 43, 0.18);
+  }
+}
+
+.submit-review-btn {
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--thread-saffron);
+  color: var(--muslin);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:hover:not(:disabled) { background: var(--thread-wine); }
+  &:disabled { background: var(--seam); cursor: not-allowed; }
+}
+
+@media (max-width: 600px) {
+  .profile-page { width: 90%; padding: 2.5rem 0 3rem; }
+
+  .profile-hero {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .place-order-btn { width: 100%; }
+}

@@ -1,0 +1,145 @@
+/* ==========================================================================
+   Tailor Connect — My Orders
+   Same atelier language as the dashboard's recent-orders list.
+   ========================================================================== */
+
+:host {
+  --linen:          #EDE6D8;
+  --muslin:         #FBF8F2;
+  --ink:            #2A2420;
+  --ink-soft:       #6B6255;
+  --thread-navy:    #2F4156;
+  --thread-saffron: #C98A2B;
+  --thread-wine:    #7C2D3A;
+  --seam:           #C3B8A3;
+  --error:          #9A3B3B;
+
+  display: block;
+  min-height: 100vh;
+  font-family: 'Work Sans', -apple-system, sans-serif;
+  color: var(--ink);
+  background: var(--linen);
+}
+
+.orders-page {
+  width: 80%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 3.5rem 0 5rem;
+}
+
+.page-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+
+  h2 {
+    margin: 0;
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: 1.8rem;
+    color: var(--thread-navy);
+  }
+}
+
+.browse-link, .cta-link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  color: var(--thread-wine);
+  transition: color 0.2s ease;
+
+  &:hover { color: var(--thread-saffron); }
+}
+
+.info-text, .error-text {
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+}
+
+.error-text { color: var(--error); }
+
+.empty-state {
+  padding: 3rem 1rem;
+  text-align: center;
+  background: var(--muslin);
+  border: 1px dashed var(--seam);
+  border-radius: 8px;
+
+  p {
+    margin: 0 0 1rem;
+    color: var(--ink-soft);
+  }
+}
+
+.order-list {
+  display: flex;
+  flex-direction: column;
+  background: var(--muslin);
+  border: 1px solid var(--seam);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.order-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.25rem 1.5rem;
+
+  & + .order-row { border-top: 1px dashed var(--seam); }
+
+  .order-main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .order-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: 1.02rem;
+    color: var(--thread-navy);
+  }
+
+  .order-sub {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+  }
+
+  .order-date {
+    font-size: 0.76rem;
+    color: var(--ink-soft);
+  }
+}
+
+.status {
+  flex-shrink: 0;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+
+  &.status-active  { background: rgba(201, 138, 43, 0.15); color: var(--thread-saffron); }
+  &.status-pending { background: rgba(124, 45, 58, 0.12);  color: var(--thread-wine); }
+  &.status-done    { background: rgba(47, 65, 86, 0.1);    color: var(--thread-navy); }
+}
+
+@media (max-width: 600px) {
+  .orders-page { width: 90%; padding: 2.5rem 0 3rem; }
+
+  .order-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+}

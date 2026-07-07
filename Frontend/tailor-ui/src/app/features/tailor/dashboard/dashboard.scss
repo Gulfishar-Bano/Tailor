@@ -1,0 +1,305 @@
+:host {
+  --linen:          #EDE6D8;
+  --muslin:         #FBF8F2;
+  --ink:            #2A2420;
+  --ink-soft:       #6B6255;
+  --thread-navy:    #2F4156;
+  --thread-saffron: #C98A2B;
+  --thread-wine:    #7C2D3A;
+  --seam:           #C3B8A3;
+
+  display: block;
+  min-height: 100vh;
+  font-family: 'Work Sans', -apple-system, sans-serif;
+  color: var(--ink);
+  background: var(--linen);
+}
+
+.tailor-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 4vw;
+  background: rgba(251, 248, 242, 0.92);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--seam);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--thread-navy);
+}
+
+.role-tag {
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background: var(--thread-navy);
+  color: var(--muslin);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.user-area {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  .user-name { font-size: 0.85rem; font-weight: 500; }
+}
+
+.logout-btn {
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--seam);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-soft);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+
+  &:hover { border-color: var(--thread-wine); color: var(--thread-wine); }
+}
+
+.dashboard-page {
+  width: 85%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 3rem 0 5rem;
+}
+
+.quote-section { margin-bottom: 3rem; }
+
+h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 1.75rem;
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: 1.6rem;
+  color: var(--thread-navy);
+}
+
+.count-badge {
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+  background: var(--thread-wine);
+  color: var(--muslin);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+}
+
+.quote-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.quote-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding: 1.1rem 1.4rem;
+  background: var(--muslin);
+  border: 1px dashed var(--thread-wine);
+  border-radius: 8px;
+}
+
+.quote-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.quote-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: 0.98rem;
+  color: var(--thread-navy);
+}
+
+.quote-sub { font-size: 0.8rem; color: var(--ink-soft); }
+
+.quote-btn {
+  flex-shrink: 0;
+  padding: 0.55rem 1.1rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--thread-wine);
+  color: var(--muslin);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  &:hover { opacity: 0.9; }
+}
+
+.quote-input-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+
+  input {
+    width: 120px;
+    padding: 0.5rem 0.7rem;
+    border: 1px solid var(--seam);
+    border-radius: 6px;
+    font-size: 0.88rem;
+
+    &:focus {
+      outline: none;
+      border-color: var(--thread-saffron);
+    }
+  }
+}
+
+.confirm-quote-btn {
+  padding: 0.5rem 0.9rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--thread-saffron);
+  color: var(--muslin);
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  &:disabled { background: var(--seam); cursor: not-allowed; }
+}
+
+.cancel-quote-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: var(--linen);
+  color: var(--ink-soft);
+  cursor: pointer;
+
+  &:hover { background: var(--seam); }
+}
+
+.info-text, .error-text { font-size: 0.9rem; color: var(--ink-soft); }
+
+.empty-state {
+  padding: 3rem 1rem;
+  text-align: center;
+  background: var(--muslin);
+  border: 1px dashed var(--seam);
+  border-radius: 8px;
+
+  p { margin: 0; color: var(--ink-soft); }
+}
+
+.order-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.25rem;
+}
+
+.order-card {
+  padding: 1.5rem;
+  background: var(--muslin);
+  border: 1px solid var(--seam);
+  border-radius: 8px;
+}
+
+.order-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+
+  h3 {
+    margin: 0;
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--thread-navy);
+  }
+}
+
+.status {
+  flex-shrink: 0;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+
+  &.status-pending { background: rgba(124, 45, 58, 0.12); color: var(--thread-wine); }
+  &.status-active  { background: rgba(201, 138, 43, 0.15); color: var(--thread-saffron); }
+  &.status-ready   { background: rgba(47, 65, 86, 0.12); color: var(--thread-navy); }
+  &.status-done    { background: rgba(47, 65, 86, 0.1); color: var(--thread-navy); }
+}
+
+.order-details {
+  margin-bottom: 1.25rem;
+
+  p {
+    margin: 0.3rem 0;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+
+    strong {
+      display: inline-block;
+      min-width: 110px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+  }
+
+  .desc { display: flex; flex-direction: column; }
+}
+
+.advance-btn {
+  width: 100%;
+  padding: 0.65rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--thread-saffron);
+  color: var(--muslin);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:hover:not(:disabled) { background: var(--thread-wine); }
+  &:disabled { background: var(--seam); cursor: not-allowed; }
+}
+
+.completed-note {
+  margin: 0;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--thread-navy);
+}

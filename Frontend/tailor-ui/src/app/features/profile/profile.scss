@@ -1,0 +1,84 @@
+:host {
+  --linen:          #EDE6D8;
+  --muslin:         #FBF8F2;
+  --ink:            #2A2420;
+  --ink-soft:       #6B6255;
+  --thread-navy:    #2F4156;
+  --thread-saffron: #C98A2B;
+  --seam:           #C3B8A3;
+
+  display: block;
+  min-height: 100vh;
+  font-family: 'Work Sans', -apple-system, sans-serif;
+  color: var(--ink);
+  background: var(--linen);
+}
+
+.profile-container {
+  width: 80%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 3.5rem 0 5rem;
+}
+
+h2 {
+  margin: 0 0 1.75rem;
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: 1.6rem;
+  color: var(--thread-navy);
+  text-align: center;
+}
+
+.profile-card {
+  padding: 2rem;
+  background: var(--muslin);
+  border: 1px solid var(--seam);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1.5rem;
+  border-radius: 50%;
+  background: var(--thread-saffron);
+  color: var(--muslin);
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: 1.6rem;
+  text-transform: uppercase;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  text-align: left;
+
+  & + .detail-row { border-top: 1px dashed var(--seam); }
+
+  .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .value {
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: capitalize;
+  }
+}
+
+.edit-note {
+  margin-top: 1.25rem;
+  font-size: 0.82rem;
+  text-align: center;
+  color: var(--ink-soft);
+}

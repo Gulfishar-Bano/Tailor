@@ -1,3 +1,5 @@
+<!-- <app-navbar></app-navbar> -->
+
 <div class="order-container">
   <h2>Place Your Order</h2>
 
@@ -48,6 +50,23 @@
         <p class="error-message">Please pick an expected delivery date.</p>
       }
     </div>
+
+    <div class="section-divider">Budget Range</div>
+
+<div class="budget-range">
+  <div>
+    <label>Min Budget (₹)</label>
+    <input type="number" formControlName="budgetMin" min="1" step="50">
+  </div>
+  <div>
+    <label>Max Budget (₹)</label>
+    <input type="number" formControlName="budgetMax" min="1" step="50">
+  </div>
+</div>
+
+@if (orderForm.errors?.['budgetRangeInvalid'] && (orderForm.get('budgetMax')?.touched || orderForm.get('budgetMin')?.touched)) {
+  <p class="error-message">Max budget must be greater than or equal to min budget.</p>
+}
 
     <div class="section-divider">Garment Details (optional)</div>
 

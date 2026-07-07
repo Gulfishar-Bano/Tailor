@@ -1,25 +1,6 @@
 <div class="dashboard-page">
 
-  <!-- ===================== Top nav ===================== -->
-  <header class="top-nav">
-    <div class="brand">
-      <span class="brand-mark">🧵</span>
-      <span class="brand-name">Tailor Connect</span>
-    </div>
-
-    <nav class="nav-links">
-      <a routerLink="/customer/dashboard" routerLinkActive="active" class="active">Dashboard</a>
-      <a routerLink="/customer/orders" routerLinkActive="active">Orders</a>
-      <a routerLink="/customer/measurements" routerLinkActive="active">Measurements</a>
-      <a routerLink="/customer/profile" routerLinkActive="active">Profile</a>
-    </nav>
-
-    <!-- swap {{ userInitials }} / {{ userName }} for your real auth data -->
-    <div class="user-chip">
-      <span class="avatar">{{ userInitials || 'G' }}</span>
-      <span class="user-name">{{ userName || 'Gulfisha' }}</span>
-    </div>
-  </header>
+<app-navbar></app-navbar>
 
   <!-- ===================== Hero ===================== -->
   <section class="hero">

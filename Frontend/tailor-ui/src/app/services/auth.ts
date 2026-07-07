@@ -44,6 +44,10 @@ export class AuthService {
     return this.http.get(`${this.baseUrl}/user/tailor/list`);
   }
 
+   getTailorById(id: string) {
+    return this.http.get<any>(`${this.baseUrl}/user/tailor/${id}`);
+  }
+
   // ---------------------------------------------------------------------
   // Session helpers
   // ---------------------------------------------------------------------
@@ -74,5 +78,8 @@ export class AuthService {
   
   createOrder(data: any) {
     return this.http.post(`${this.baseUrl}/orders/create`, data);
+  }
+   getMyOrders(customerId: string) {
+    return this.http.get<any[]>(`${this.baseUrl}/orders/customer/${customerId}`);
   }
 }

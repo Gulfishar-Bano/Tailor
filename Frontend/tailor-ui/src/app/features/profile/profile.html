@@ -1,0 +1,30 @@
+<app-navbar></app-navbar>
+
+<div class="profile-container">
+  <h2>My Profile</h2>
+
+  @if (user) {
+    <div class="profile-card">
+      <div class="avatar">{{ user.name.charAt(0) }}</div>
+      <div class="detail-row">
+        <span class="label">Name</span>
+        <span class="value">{{ user.name }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Email</span>
+        <span class="value">{{ user.email }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Phone</span>
+        <span class="value">{{ user.phone }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Role</span>
+        <span class="value">{{ user.role }}</span>
+      </div>
+    </div>
+    <p class="edit-note">Editing your profile details isn't available yet — coming soon.</p>
+  } @else {
+    <p>Please log in to view your profile.</p>
+  }
+</div>

@@ -59,6 +59,7 @@ export class AuthService {
 
     // Step 1: Find user by email
     const user = await this.userService.findByEmail(email); 
+    console.log('User found:', user); // Debugging line
 
     if (!user) {
       throw new BadRequestException('Invalid email or password');
@@ -69,6 +70,8 @@ export class AuthService {
       password,
       user.password,
     );
+
+    console.log('Password valid:', isPasswordValid); // Debugging line
 
     if (!isPasswordValid) {
       throw new BadRequestException('Invalid email or password');

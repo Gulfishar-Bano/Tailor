@@ -1,0 +1,35 @@
+<header class="top-nav">
+  <div class="brand" routerLink="/customer/dashboard">
+    <span class="brand-mark">🧵</span>
+    <span class="brand-name">Tailor Connect</span>
+  </div>
+
+  <nav class="nav-links">
+    <a routerLink="/customer/dashboard" routerLinkActive="active">Home</a>
+    <a routerLink="/customer/tailors" routerLinkActive="active">Find Tailors</a>
+    <a routerLink="/customer/orders" routerLinkActive="active">My Orders</a>
+  </nav>
+
+  <div class="user-area">
+    <button class="user-chip" (click)="toggleDropdown()">
+      <span class="avatar">{{ userInitials }}</span>
+      <span class="user-name">{{ user?.name || 'Guest' }}</span>
+      <span class="chevron" [class.open]="dropdownOpen()">▾</span>
+    </button>
+
+    @if (dropdownOpen()) {
+      <div class="dropdown-menu">
+        <a routerLink="/customer/profile" (click)="closeDropdown()">
+          <span class="menu-icon">👤</span> My Profile
+        </a>
+        <a routerLink="/customer/measurements" (click)="closeDropdown()">
+          <span class="menu-icon">📏</span> Add Measurement
+        </a>
+        <div class="menu-divider"></div>
+        <button class="logout-item" (click)="logout()">
+          <span class="menu-icon">↪</span> Logout
+        </button>
+      </div>
+    }
+  </div>
+</header>

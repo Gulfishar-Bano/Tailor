@@ -1,0 +1,371 @@
+
+/* ==========================================================================
+   Tailor Connect — Admin Dashboard
+   Same flowing full-bleed band layout as the customer dashboard, with an
+   added "pending approvals" section for admin actions.
+   ========================================================================== */
+
+:host {
+  --linen:          #EDE6D8;
+  --muslin:         #FBF8F2;
+  --ink:            #2A2420;
+  --ink-soft:       #6B6255;
+  --thread-navy:    #2F4156;
+  --thread-saffron: #C98A2B;
+  --thread-wine:    #7C2D3A;
+  --seam:           #C3B8A3;
+  --leaf-green:     #4C7A5C;
+
+  display: block;
+  font-family: 'Work Sans', -apple-system, sans-serif;
+  color: var(--ink);
+}
+
+.dashboard-page {
+  min-height: 100vh;
+  background: var(--linen);
+}
+
+%contain {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding-left: 4vw;
+  padding-right: 4vw;
+}
+
+// ---------------------------------------------------------------------------
+// Shared type scaffolding
+// ---------------------------------------------------------------------------
+
+.eyebrow {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--thread-wine);
+}
+
+.section-head h2 {
+  margin: 0;
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: var(--thread-navy);
+}
+
+// ---------------------------------------------------------------------------
+// Hero band
+// ---------------------------------------------------------------------------
+
+.hero {
+  @extend %contain;
+  padding-top: 4.5rem;
+  padding-bottom: 3rem;
+
+  h1 {
+    margin: 0 0 0.75rem;
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(1.9rem, 3.2vw, 2.7rem);
+    color: var(--thread-navy);
+    letter-spacing: -0.01em;
+  }
+
+  p {
+    margin: 0 0 1.75rem;
+    max-width: 52ch;
+    font-size: 1.02rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+}
+
+.hero-stats {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-top: 2.75rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--seam);
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stat-value {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: 1.4rem;
+    color: var(--thread-navy);
+    line-height: 1.1;
+  }
+
+  .stat-label {
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+  }
+
+  .stat-divider {
+    width: 1px;
+    height: 32px;
+    background: var(--seam);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Quick actions
+// ---------------------------------------------------------------------------
+
+.actions {
+  background: var(--muslin);
+  border-top: 1px solid var(--seam);
+  border-bottom: 1px solid var(--seam);
+  padding-top: 3.5rem;
+  padding-bottom: 3.5rem;
+
+  .section-head, .action-list { @extend %contain; }
+  .section-head { margin-bottom: 1.75rem; }
+}
+
+.action-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.action-row {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.35rem 0.5rem;
+  text-decoration: none;
+  color: inherit;
+  border-top: 1px solid var(--seam);
+  transition: background 0.2s ease, padding-left 0.2s ease;
+
+  &:last-child { border-bottom: 1px solid var(--seam); }
+
+  &:hover {
+    background: rgba(201, 138, 43, 0.06);
+    padding-left: 0.9rem;
+
+    .action-arrow { transform: translateX(4px); opacity: 1; }
+    h3 { color: var(--thread-wine); }
+  }
+
+  .action-icon {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--linen);
+    font-size: 1.25rem;
+  }
+
+  .action-copy {
+    flex: 1;
+    min-width: 0;
+
+    h3 {
+      margin: 0 0 0.25rem;
+      font-family: 'Fraunces', Georgia, serif;
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: var(--thread-navy);
+      transition: color 0.2s ease;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--ink-soft);
+    }
+  }
+
+  .action-arrow {
+    flex-shrink: 0;
+    font-size: 1.1rem;
+    color: var(--thread-saffron);
+    opacity: 0.5;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Pending approvals band
+// ---------------------------------------------------------------------------
+
+.approvals {
+  padding-top: 3.5rem;
+  padding-bottom: 3.5rem;
+
+  .section-head, .approval-list, .empty-state { @extend %contain; }
+  .section-head { margin-bottom: 1.75rem; }
+}
+
+.empty-state {
+  padding: 1.5rem 0.5rem;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.approval-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.approval-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 0.5rem;
+  border-top: 1px solid var(--seam);
+
+  &:last-child { border-bottom: 1px solid var(--seam); }
+
+  .approval-main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .approval-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--thread-navy);
+  }
+
+  .approval-sub {
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+  }
+
+  .approval-actions {
+    display: flex;
+    gap: 0.6rem;
+    flex-shrink: 0;
+  }
+}
+
+.btn-approve, .btn-reject {
+  padding: 0.45rem 1rem;
+  border: none;
+  border-radius: 999px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  &:hover { opacity: 0.85; }
+}
+
+.btn-approve {
+  background: var(--leaf-green);
+  color: var(--muslin);
+}
+
+.btn-reject {
+  background: transparent;
+  color: var(--thread-wine);
+  border: 1px solid var(--thread-wine);
+}
+
+// ---------------------------------------------------------------------------
+// Recent orders band
+// ---------------------------------------------------------------------------
+
+.recent {
+  background: var(--muslin);
+  border-top: 1px solid var(--seam);
+  padding-top: 3.5rem;
+  padding-bottom: 4.5rem;
+
+  .section-head, .order-list { @extend %contain; }
+  .section-head { margin-bottom: 1.75rem; }
+}
+
+.order-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.order-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 0.5rem;
+  border-top: 1px solid var(--seam);
+
+  &:last-child { border-bottom: 1px solid var(--seam); }
+
+  .order-main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .order-title {
+    font-size: 0.92rem;
+    font-weight: 500;
+  }
+
+  .order-date {
+    font-size: 0.76rem;
+    color: var(--ink-soft);
+  }
+}
+
+.status {
+  flex-shrink: 0;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+
+  &.status-active  { background: rgba(201, 138, 43, 0.15); color: var(--thread-saffron); }
+  &.status-pending { background: rgba(124, 45, 58, 0.12);  color: var(--thread-wine); }
+  &.status-done    { background: rgba(47, 65, 86, 0.1);    color: var(--thread-navy); }
+}
+
+// ---------------------------------------------------------------------------
+// Footer
+// ---------------------------------------------------------------------------
+
+.dash-footer {
+  @extend %contain;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-top: 1px solid var(--seam);
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+// ---------------------------------------------------------------------------
+// Responsive
+// ---------------------------------------------------------------------------
+
+@media (max-width: 480px) {
+  .action-row { align-items: flex-start; }
+  .order-row, .approval-row { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+  .approval-actions { width: 100%; }
+  .btn-approve, .btn-reject { flex: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .action-row { transition: none; }
+}

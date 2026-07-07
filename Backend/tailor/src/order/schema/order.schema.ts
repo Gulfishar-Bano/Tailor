@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 
 export type OrderDocument = HydratedDocument<Order>;
 
@@ -8,19 +8,13 @@ export type OrderDocument = HydratedDocument<Order>;
 })
 export class Order {
 
-  @Prop({
-    required: true,
-  })
-  customerId: string;
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
+  customerId: Types.ObjectId;
 
-  @Prop({
-    required: true,
-  })
-  tailorId: string;
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
+  tailorId: Types.ObjectId;
 
-  @Prop({
-    required: true,
-  })
+  @Prop({ required: true })
   garmentType: string;
 
   @Prop()
@@ -32,10 +26,28 @@ export class Order {
   @Prop([String])
   images: string[];
 
+  @Prop({ required: true })
+  budgetMin: number;
+
+  @Prop({ required: true })
+  budgetMax: number;
+
+  @Prop({ required: false })
+  tailorQuote?: number;
+
+  @Prop({ required: false })
+  adminMargin?: number;
+
+  @Prop({ required: false })
+  finalPrice?: number;
+
   @Prop({
-    default: 'Pending',
+    default: 'Pending Admin Review',
   })
   status: string;
+
+  @Prop({ required: false })
+  adminNotes?: string;
 
   @Prop()
   expectedDelivery: Date;

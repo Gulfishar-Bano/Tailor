@@ -61,6 +61,13 @@ export class User {
     required: false,
   })
   bio?: string;
+
+  // photos of past finished work — shown on the tailor's public profile
+  @Prop({
+    type: [String],
+    default: [],
+  })
+  portfolioImages?: string[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

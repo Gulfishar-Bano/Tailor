@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
@@ -83,6 +83,16 @@ async getTailorsByCity(
   });
 }
 
+
+  async getTailorProfile(id: string) {
+    const tailor = await this.userModel.findById(id).lean();
+    if (!tailor) {
+      throw new NotFoundException('Tailor not found');
+    }
+    // strip the password before sending to the frontend
+    const { password, ...safeTailor } = tailor;
+    return safeTailor;
+  }
     
 
 

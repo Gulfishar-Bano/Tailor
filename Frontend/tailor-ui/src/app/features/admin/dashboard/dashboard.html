@@ -1,1 +1,156 @@
-<p>dashboard works!</p>
+<app-admin-navbar></app-admin-navbar>
+<div class="dashboard-page">
+
+
+  <!-- ===================== Hero ===================== -->
+  <section class="hero">
+    <span class="eyebrow">Admin dashboard</span>
+    <h1>Welcome back, {{ userName }} 👋</h1>
+    <p>Here's what's happening across the platform today.</p>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-value">{{ totalCustomers }}</span>
+        <span class="stat-label">Customers</span>
+      </div>
+      <span class="stat-divider"></span>
+      <div class="stat">
+        <span class="stat-value">{{ totalTailors }}</span>
+        <span class="stat-label">Tailors</span>
+      </div>
+      <span class="stat-divider"></span>
+      <div class="stat">
+        <span class="stat-value">{{ activeOrders }}</span>
+        <span class="stat-label">Active Orders</span>
+      </div>
+      <span class="stat-divider"></span>
+      <div class="stat">
+        <span class="stat-value">{{ pendingApprovals }}</span>
+        <span class="stat-label">Pending Approvals</span>
+      </div>
+      <span class="stat-divider"></span>
+      <div class="stat">
+        <span class="stat-value">₹{{ totalRevenue.toLocaleString('en-IN') }}</span>
+        <span class="stat-label">Total Revenue</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Quick actions ===================== -->
+  <section class="actions">
+    <div class="section-head">
+      <span class="eyebrow">Quick actions</span>
+      <h2>Manage the platform</h2>
+    </div>
+
+    <div class="action-list">
+
+      <a class="action-row" routerLink="/admin/tailors">
+        <span class="action-icon">🧵</span>
+        <div class="action-copy">
+          <h3>Manage Tailors</h3>
+          <p>Approve, suspend, or review tailor profiles and their work.</p>
+        </div>
+        <span class="action-arrow">→</span>
+      </a>
+
+      <a class="action-row" routerLink="/admin/customers">
+        <span class="action-icon">👥</span>
+        <div class="action-copy">
+          <h3>Manage Customers</h3>
+          <p>View customer accounts, orders, and support history.</p>
+        </div>
+        <span class="action-arrow">→</span>
+      </a>
+
+      <a class="action-row" routerLink="/admin/orders">
+        <span class="action-icon">📦</span>
+        <div class="action-copy">
+          <h3>All Orders</h3>
+          <p>Monitor every order across the platform, by status.</p>
+        </div>
+        <span class="action-arrow">→</span>
+      </a>
+
+      <a class="action-row" routerLink="/admin/reports">
+        <span class="action-icon">📊</span>
+        <div class="action-copy">
+          <h3>Reports & Revenue</h3>
+          <p>Track platform revenue, commissions, and growth trends.</p>
+        </div>
+        <span class="action-arrow">→</span>
+      </a>
+
+      <a class="action-row" routerLink="/admin/settings">
+        <span class="action-icon">⚙️</span>
+        <div class="action-copy">
+          <h3>Platform Settings</h3>
+          <p>Configure categories, fees, and platform-wide policies.</p>
+        </div>
+        <span class="action-arrow">→</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ===================== Pending tailor approvals ===================== -->
+  <section class="approvals">
+    <div class="section-head">
+      <span class="eyebrow">Needs attention</span>
+      <h2>Pending tailor approvals</h2>
+    </div>
+
+    @if (pendingTailorApprovals.length === 0) {
+      <div class="empty-state">
+        <p>No pending approvals right now 🎉</p>
+      </div>
+    } @else {
+      <div class="approval-list">
+        @for (tailor of pendingTailorApprovals; track tailor.name) {
+          <div class="approval-row">
+            <div class="approval-main">
+              <span class="approval-title">{{ tailor.name }}</span>
+              <span class="approval-sub">{{ tailor.location }} · Applied {{ tailor.appliedOn }}</span>
+            </div>
+            <div class="approval-actions">
+              <button class="btn-approve" (click)="approveTailor(tailor)">Approve</button>
+              <button class="btn-reject" (click)="rejectTailor(tailor)">Reject</button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </section>
+
+  <!-- ===================== Recent orders ===================== -->
+  <section class="recent">
+    <div class="section-head">
+      <span class="eyebrow">Recent activity</span>
+      <h2>Latest orders platform-wide</h2>
+    </div>
+
+    <div class="order-list">
+      @for (order of recentOrders; track order.title) {
+        <div class="order-row">
+          <div class="order-main">
+            <span class="order-title">{{ order.title }}</span>
+            <span class="order-date">{{ order.customer }} · {{ order.date }}</span>
+          </div>
+          <span
+            class="status"
+            [class.status-active]="order.status === 'active'"
+            [class.status-pending]="order.status === 'pending'"
+            [class.status-done]="order.status === 'done'"
+          >
+            {{ order.status === 'active' ? 'In Progress' : order.status === 'pending' ? 'Pending Fitting' : 'Completed' }}
+          </span>
+        </div>
+      }
+    </div>
+  </section>
+
+  <footer class="dash-footer">
+    <span>Tailor Connect Admin — stitched with care since 2026</span>
+  </footer>
+
+</div>

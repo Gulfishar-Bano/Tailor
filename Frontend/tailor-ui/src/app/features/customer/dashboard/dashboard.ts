@@ -1,11 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AuthService } from '../../../services/auth';
+import { AuthService } from '../../../services/auth'; // adjust path to match your project
+import { Navbar } from '../../navbar/navbar'; // adjust path to match your project
 
 @Component({
   selector: 'app-customer-dashboard',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, Navbar],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
@@ -22,8 +23,6 @@ export class CustomerDashboard implements OnInit {
 
   ngOnInit(): void {
     const user = this.authService.getCurrentUser();
-
-    console.log('Current User:', user);
     this.userName = user?.name ?? 'Guest';
     this.userInitials = this.getInitials(this.userName);
   }

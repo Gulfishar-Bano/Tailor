@@ -1,8 +1,10 @@
 import {
   IsBoolean,
   IsDateString,
+  IsInt,
   IsNotEmpty,
   IsOptional,
+  IsPositive,
   IsString,
 } from 'class-validator';
 
@@ -26,6 +28,14 @@ export class CreateOrderDto {
   @IsString()
   @IsNotEmpty()
   style: string;
+
+  @IsInt()
+  @IsPositive()
+  budgetMin: number;
+
+  @IsInt()
+  @IsPositive()
+  budgetMax: number;
 
   @IsString()
   @IsOptional()

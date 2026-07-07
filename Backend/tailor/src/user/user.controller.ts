@@ -46,4 +46,15 @@ getTailorsByCity(
   );
 }
  
+
+
+  @Get('tailor/:id')
+  getTailorProfile(@Param('id') id: string) {
+    return this.userService.getTailorProfile(id);
+  }
+ 
+ 
+
+ 
+ 
 }

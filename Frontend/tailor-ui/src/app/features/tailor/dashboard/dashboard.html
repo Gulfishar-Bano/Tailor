@@ -1,1 +1,101 @@
-<p>dashboard works!</p>
+<header class="tailor-nav">
+  <div class="brand">
+    <span class="brand-mark">🧵</span>
+    <span class="brand-name">Tailor Connect</span>
+    <span class="role-tag">Tailor</span>
+  </div>
+  <div class="user-area">
+    <span class="user-name">{{ user?.name || 'Guest' }}</span>
+    <button class="logout-btn" (click)="logout()">Logout</button>
+  </div>
+</header>
+
+<div class="dashboard-page">
+
+  <section class="quote-section">
+    <h2>Quote Requests <span class="count-badge">{{ quoteRequests().length }}</span></h2>
+
+    @if (quoteRequests().length === 0) {
+      <p class="info-text">No new orders waiting on your quote.</p>
+    } @else {
+      <div class="quote-list">
+        @for (order of quoteRequests(); track order._id) {
+          <div class="quote-card">
+            <div class="quote-main">
+              <span class="quote-title">{{ order.garmentType }} — {{ order.customerName }}</span>
+              <span class="quote-sub">{{ order.style }} · {{ order.stitchingType }}</span>
+              @if (order.description) {
+                <span class="quote-sub">{{ order.description }}</span>
+              }
+            </div>
+
+            @if (quotingOrderId() === order._id) {
+              <div class="quote-input-row">
+                <input
+                  type="number"
+                  placeholder="Your price (₹)"
+                  [ngModel]="quoteInput()"
+                  (ngModelChange)="quoteInput.set($event)"
+                >
+                <button
+                  class="confirm-quote-btn"
+                  [disabled]="submittingQuote() || !quoteInput()"
+                  (click)="submitQuote(order._id)"
+                >
+                  {{ submittingQuote() ? 'Sending…' : 'Send' }}
+                </button>
+                <button class="cancel-quote-btn" (click)="cancelQuoting()">✕</button>
+              </div>
+            } @else {
+              <button class="quote-btn" (click)="startQuoting(order._id)">Name Your Price</button>
+            }
+          </div>
+        }
+      </div>
+    }
+  </section>
+
+  <h2>My Orders</h2>
+
+  @if (loading()) {
+    <p class="info-text">Loading your orders…</p>
+  } @else if (errorMessage()) {
+    <p class="error-text">{{ errorMessage() }}</p>
+  } @else if (orders().length === 0) {
+    <div class="empty-state">
+      <p>No confirmed orders yet. New orders will appear here once admin confirms them.</p>
+    </div>
+  } @else {
+    <div class="order-grid">
+      @for (order of orders(); track order._id) {
+        <div class="order-card">
+          <div class="order-header">
+            <h3>{{ order.garmentType }} — {{ order.customerName }}</h3>
+            <span class="status" [ngClass]="statusClass(order.status)">{{ order.status }}</span>
+          </div>
+
+          <div class="order-details">
+            <p><strong>Style</strong>{{ order.style }}</p>
+            <p><strong>Stitching</strong>{{ order.stitchingType }}</p>
+            @if (order.fabric) { <p><strong>Fabric</strong>{{ order.fabric }}</p> }
+            @if (order.fabricColor) { <p><strong>Color</strong>{{ order.fabricColor }}</p> }
+            @if (order.description) { <p class="desc"><strong>Notes</strong>{{ order.description }}</p> }
+            <p><strong>Expected Delivery</strong>{{ order.expectedDelivery | date: 'mediumDate' }}</p>
+          </div>
+
+          @if (nextStatusFor(order.status); as next) {
+            <button
+              class="advance-btn"
+              [disabled]="updatingOrderId() === order._id"
+              (click)="advanceStatus(order)"
+            >
+              {{ updatingOrderId() === order._id ? 'Updating…' : 'Mark as ' + next }}
+            </button>
+          } @else {
+            <p class="completed-note">✓ Order delivered</p>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

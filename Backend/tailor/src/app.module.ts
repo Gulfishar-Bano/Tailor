@@ -7,6 +7,9 @@ import { UserModule } from './user/user.module';
 import { OrderModule } from './order/order.module';
 import { AdminModule } from './admin/admin.module';
 
+import { ReviewModule } from './review/review.module';
+import { AdminOrderModule } from './admin-order/admin-order.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -19,6 +22,9 @@ import { AdminModule } from './admin/admin.module';
     UserModule,
     OrderModule,
     AdminModule,
+    ReviewModule,
+    AdminOrderModule,
   ],
+  providers: [],
 })
 export class AppModule {}

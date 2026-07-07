@@ -1,0 +1,66 @@
+<div class="admin-shell" [class.collapsed]="sidebarCollapsed()">
+
+  <!-- ===================== Sidebar ===================== -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-mark">🧵</span>
+      @if (!sidebarCollapsed()) {
+        <span class="brand-name">Tailor<span class="brand-accent">Connect</span></span>
+      }
+    </div>
+
+    <nav class="sidebar-nav">
+      @for (item of navSections; track item.label) {
+        @if (item.children) {
+          <div class="nav-group">
+            <button class="nav-item nav-parent" (click)="toggleSection(item)">
+              <span class="nav-icon">{{ item.icon }}</span>
+              @if (!sidebarCollapsed()) {
+                <span class="nav-label">{{ item.label }}</span>
+                <span class="nav-caret" [class.open]="item.expanded">▾</span>
+              }
+            </button>
+
+            @if (item.expanded && !sidebarCollapsed()) {
+              <div class="nav-children">
+                @for (child of item.children; track child.route) {
+                  <a class="nav-child" [routerLink]="child.route" routerLinkActive="active">
+                    {{ child.label }}
+                  </a>
+                }
+              </div>
+            }
+          </div>
+        } @else {
+          <a class="nav-item" [routerLink]="item.route" routerLinkActive="active">
+            <span class="nav-icon">{{ item.icon }}</span>
+            @if (!sidebarCollapsed()) {
+              <span class="nav-label">{{ item.label }}</span>
+            }
+          </a>
+        }
+      }
+    </nav>
+
+    <button class="sidebar-collapse-btn" (click)="toggleSidebar()">
+      {{ sidebarCollapsed() ? '»' : '«' }}
+    </button>
+  </aside>
+
+  <!-- ===================== Top header ===================== -->
+  <header class="topbar">
+    <button class="menu-toggle" (click)="toggleSidebar()">☰</button>
+
+    <div class="topbar-right">
+      <div class="admin-chip">
+        <span class="admin-avatar">👤</span>
+        <div class="admin-info">
+          <span class="admin-name">{{ adminName }}</span>
+          <span class="admin-role">{{ adminRole }}</span>
+        </div>
+      </div>
+      <button class="logout-btn" (click)="logout()" title="Log out">⏻</button>
+    </div>
+  </header>
+
+</div>
