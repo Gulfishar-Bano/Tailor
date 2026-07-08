@@ -1,6 +1,6 @@
 /* ==========================================================================
    Admin — All Customer Orders
-   Full stylesheet — replaces whatever's currently in order-list.scss
+   Full stylesheet
    ========================================================================== */
 
 :host {
@@ -22,7 +22,12 @@
 .admin-content {
   max-width: 1200px;
   margin: 0 auto;
+  margin-top: 64px; // matches admin-navbar's fixed topbar height — prevents overlap
   padding: 2.5rem 2rem 4rem;
+
+  @media (max-width: 860px) {
+    margin-top: 64px; // topbar stays visible on mobile too
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -130,17 +135,21 @@
 }
 
 // ---------------------------------------------------------------------------
-// Table
+// Table — always horizontally scrollable so columns never get clipped
 // ---------------------------------------------------------------------------
+
+.orders-table-wrapper {
+  overflow-x: auto;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
 
 .orders-table {
   width: 100%;
+  min-width: 1050px; // forces scroll instead of squeezing/clipping columns
   border-collapse: separate;
   border-spacing: 0;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  overflow: hidden;
 
   thead th {
     padding: 0.85rem 1.1rem;
@@ -152,6 +161,7 @@
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: var(--ink-soft);
+    white-space: nowrap;
   }
 
   tbody td {
@@ -159,6 +169,7 @@
     font-size: 0.88rem;
     color: var(--ink);
     border-bottom: 1px solid var(--border);
+    white-space: nowrap;
   }
 
   tbody tr:last-child td {
@@ -190,7 +201,7 @@
 }
 
 // ---------------------------------------------------------------------------
-// Action button + empty action state
+// Action buttons + links
 // ---------------------------------------------------------------------------
 
 .assign-btn {
@@ -211,6 +222,16 @@
 
 .no-action {
   color: #c4c4c4;
+}
+
+.phone-link {
+  display: inline-block;
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 500;
+
+  &:hover { text-decoration: underline; }
 }
 
 // ---------------------------------------------------------------------------
@@ -252,7 +273,7 @@
 }
 
 // ---------------------------------------------------------------------------
-// Quote modal
+// Order Details / Status Update modal
 // ---------------------------------------------------------------------------
 
 .modal-backdrop {
@@ -281,6 +302,12 @@
     font-weight: 700;
     color: var(--ink);
   }
+}
+
+.modal-large {
+  max-width: 560px;
+  max-height: 88vh;
+  overflow-y: auto;
 }
 
 .modal-subtitle { margin: 0 0 0.25rem; font-size: 0.85rem; color: var(--ink-soft); }
@@ -313,7 +340,8 @@
 }
 
 .modal input,
-.modal textarea {
+.modal textarea,
+.modal select {
   width: 100%;
   padding: 0.6rem 0.8rem;
   border: 1px solid var(--border);
@@ -330,6 +358,64 @@
 }
 
 .modal textarea { min-height: 60px; resize: vertical; }
+
+.modal select { cursor: pointer; }
+
+// --- Detail grid (used inside the order details modal) ---
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 1.25rem 0;
+}
+
+.detail-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  &.full-width {
+    grid-column: 1 / -1;
+    margin-bottom: 1rem;
+  }
+}
+
+.detail-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.detail-value {
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+
+.modal-divider {
+  margin: 1.25rem 0;
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+// --- Reference images ---
+
+.image-strip {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-top: 0.4rem;
+}
+
+.ref-image {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
 
 .final-price {
   margin: 1rem 0 0;
@@ -369,5 +455,5 @@
 @media (max-width: 768px) {
   .admin-content { padding: 1.5rem 1rem 3rem; }
   .filters-bar { flex-direction: column; }
-  .orders-table { display: block; overflow-x: auto; white-space: nowrap; }
+  .detail-grid { grid-template-columns: 1fr; }
 }

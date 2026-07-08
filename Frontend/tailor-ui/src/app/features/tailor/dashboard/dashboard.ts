@@ -112,16 +112,16 @@ export class TailorDashboard implements OnInit {
 
     this.updatingOrderId.set(order._id);
 
-    this.orderService.updateOrderStatus(order._id, { status: next }).subscribe({
-      next: () => {
-        this.updatingOrderId.set(null);
-        this.loadOrders(); // refresh so the new status reflects immediately
-      },
-      error: (err) => {
-        console.error(err);
-        this.updatingOrderId.set(null);
-      },
-    });
+    // this.orderService.updateOrderStatus(order._id, { status: next }).subscribe({
+    //   next: () => {
+    //     this.updatingOrderId.set(null);
+    //     this.loadOrders(); // refresh so the new status reflects immediately
+    //   },
+    //   error: (err) => {
+    //     console.error(err);
+    //     this.updatingOrderId.set(null);
+    //   },
+    // });
   }
 
   statusClass(status: string): string {

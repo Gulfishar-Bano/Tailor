@@ -1,0 +1,39 @@
+<div class="portfolio-page">
+  <h2>My Portfolio</h2>
+  <p class="subtitle">Upload photos of your past work — customers see these on your profile.</p>
+
+  <input
+    type="file"
+    accept="image/png, image/jpeg, image/webp"
+    multiple
+    [disabled]="uploading() || images().length >= 10"
+    (change)="onFilesSelected($event)"
+  >
+
+  @if (uploading()) {
+    <p class="hint">Uploading…</p>
+  }
+  @if (errorMessage()) {
+    <p class="error-text">{{ errorMessage() }}</p>
+  }
+  @if (savedMessage()) {
+    <p class="success-text">{{ savedMessage() }}</p>
+  }
+
+  @if (images().length === 0) {
+    <p class="empty-text">No portfolio photos yet — upload some above.</p>
+  } @else {
+    <div class="portfolio-grid">
+      @for (img of images(); track img) {
+        <div class="portfolio-item">
+          <img [src]="img" alt="Portfolio work sample">
+          <button type="button" class="remove-btn" (click)="removeImage(img)" aria-label="Remove">✕</button>
+        </div>
+      }
+    </div>
+  }
+
+  <button class="save-btn" [disabled]="saving() || uploading()" (click)="save()">
+    {{ saving() ? 'Saving…' : 'Save Portfolio' }}
+  </button>
+</div>

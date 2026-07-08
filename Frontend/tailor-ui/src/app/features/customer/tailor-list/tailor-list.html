@@ -1,18 +1,62 @@
 <app-navbar></app-navbar>
 
-<div class="container">
-  <h2>Available Tailors</h2>
+<div class="tailor-page">
 
-  @for (tailor of tailors(); track tailor._id) {
-    <div class="card">
-      <div>
-        <h3>{{ tailor.name }}</h3>
-        <p><strong>Email</strong>{{ tailor.email }}</p>
-        <p><strong>Phone</strong>{{ tailor.phone }}</p>
-      </div>
-      <button [routerLink]="['/customer/tailor', tailor._id]">View Profile</button>
+  <section class="tailor-hero">
+    <span class="eyebrow">Curated for you</span>
+    <h1>Find Your Perfect Tailor</h1>
+    <p>Handpicked, verified tailors ready to bring your outfit to life.</p>
+
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        placeholder="Search by name, specialization or city..."
+        [(ngModel)]="searchTerm"
+        (input)="onSearch()"
+      >
     </div>
-  } @empty {
-    <p>No tailors found or data hasn't loaded yet.</p>
-  }
+  </section>
+
+  <section class="tailor-grid-section">
+    @if (filteredTailors().length) {
+      <div class="tailor-grid">
+        @for (tailor of filteredTailors(); track tailor._id) {
+          <div class="tailor-card" [routerLink]="['/customer/tailor', tailor._id]">
+            <div class="card-top">
+              <div class="avatar">{{ getInitials(tailor.name) }}</div>
+              @if (tailor.experience) {
+                <span class="exp-badge">{{ tailor.experience }}+ yrs</span>
+              }
+            </div>
+
+            <h3>{{ tailor.name }}</h3>
+
+            @if (tailor.specialization) {
+              <span class="spec-tag">{{ tailor.specialization }}</span>
+            }
+
+            <div class="card-meta">
+              @if (tailor.city) {
+                <span class="meta-item">📍 {{ tailor.city }}</span>
+              }
+              <span class="meta-item">⭐ {{ tailor.rating || '4.8' }}</span>
+            </div>
+
+            @if (tailor.bio) {
+              <p class="card-bio">{{ tailor.bio }}</p>
+            }
+
+            <button class="view-btn">View Profile →</button>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="empty-state">
+        <span class="empty-icon">🧵</span>
+        <p>No tailors match your search right now.</p>
+      </div>
+    }
+  </section>
+
 </div>

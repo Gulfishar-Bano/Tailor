@@ -53,6 +53,18 @@ getTailorsByCity(
     return this.userService.getTailorProfile(id);
   }
  
+  // ADD to your existing UserController (wherever GET tailor/:id lives)
+
+@Patch('tailor/:id/portfolio')
+updatePortfolio(
+  @Param('id') id: string,
+  @Body('images') images: string[],
+) {
+  return this.userService.updatePortfolio(id, images);
+}
+
+
+
  
 
  

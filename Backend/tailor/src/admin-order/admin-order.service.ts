@@ -37,7 +37,7 @@ export class AdminOrdersService {
       this.orderModel
         .find(filter)
         .populate('customerId', 'name email phone') // adjust field names to your schema
-        .populate('tailorId', 'name shopName')
+          .populate('tailorId', 'name phone city specialization')
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
@@ -100,5 +100,19 @@ async addMarginAndFinalize(orderId: string, dto: AddMarginDto) {
   await order.save();
 
   return { message: 'Final price set, awaiting customer confirmation', order };
+}
+
+// admin-orders.service.ts — add this method
+async updateStatus(orderId: string, status: string, adminNotes?: string) {
+  const update: any = { status };
+  if (adminNotes !== undefined) update.adminNotes = adminNotes;
+
+  const order = await this.orderModel
+    .findByIdAndUpdate(orderId, update, { new: true })
+    .populate('customerId', 'name email phone')
+    .populate('tailorId', 'name phone city specialization')
+    .lean();
+
+  return { message: 'Status updated', order };
 }
 }

@@ -33,52 +33,50 @@
   } @else if (orders().length === 0) {
     <p class="empty-state">No orders found.</p>
   } @else {
-    <table class="orders-table">
-      <thead>
-        <tr>
-          <th>Customer</th>
-          <th>Tailor</th>
-          <th>Garment</th>
-          <th>Style</th>
-          <th>Budget</th>
-          <th>Delivery</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (order of orders(); track order._id) {
+    <div class="orders-table-wrapper">
+      <table class="orders-table">
+        <thead>
           <tr>
-            <td>{{ customerName(order) }}</td>
-            <td>{{ tailorName(order) }}</td>
-            <td>{{ order.garmentType }}</td>
-            <td>{{ order.style }}</td>
-            <td>₹{{ order.budgetMin }} – ₹{{ order.budgetMax }}</td>
-            <td>{{ order.expectedDelivery | date: 'dd MMM yyyy' }}</td>
-            <td>
-              <span class="status" [class]="statusClass(order.status)">
-                {{ order.status }}
-              </span>
-            </td>
-            <td>
-              @if (order.status === 'Pending Admin Review') {
-                <button
-                  class="assign-btn"
-                  [disabled]="sendingToTailor() === order._id"
-                  (click)="sendToTailor(order)"
-                >
-                  {{ sendingToTailor() === order._id ? 'Sending…' : 'Send to Tailor' }}
-                </button>
-              } @else if (order.status === 'Tailor Quoted') {
-                <button class="assign-btn" (click)="openMarginModal(order)">Add Margin</button>
-              } @else {
-                <span class="no-action">—</span>
-              }
-            </td>
+            <th>Customer</th>
+            <th>Tailor</th>
+            <th>Tailor Contact</th>
+            <th>Garment</th>
+            <th>Fabric Color</th>
+            <th>Budget</th>
+            <th>Delivery</th>
+            <th>Status</th>
+            <th>Actions</th>
           </tr>
-        }
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          @for (order of orders(); track order._id) {
+            <tr>
+              <td>{{ customerName(order) }}</td>
+              <td>{{ tailorName(order) }}</td>
+              <td>
+                @if (tailorPhone(order) !== '—') {
+                  <a class="phone-link" href="tel:{{ tailorPhone(order) }}">📞 {{ tailorPhone(order) }}</a>
+                } @else {
+                  <span class="no-action">—</span>
+                }
+              </td>
+              <td>{{ order.garmentType }}</td>
+              <td>{{ order.fabricColor || '—' }}</td>
+              <td>₹{{ order.budgetMin }} – ₹{{ order.budgetMax }}</td>
+              <td>{{ order.expectedDelivery | date: 'dd MMM yyyy' }}</td>
+              <td>
+                <span class="status" [class]="statusClass(order.status)">
+                  {{ order.status }}
+                </span>
+              </td>
+              <td>
+                <button class="assign-btn" (click)="openOrderDetails(order)">View & Update</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
 
     <div class="pagination">
       <button [disabled]="page === 1" (click)="goToPage(page - 1)">← Prev</button>
@@ -88,31 +86,99 @@
   }
 </main>
 
-<!-- Add Margin modal (tailor's quote already submitted, admin just adds their cut) -->
-@if (marginOrder(); as order) {
-  <div class="modal-backdrop" (click)="closeMarginModal()">
-    <div class="modal" (click)="$event.stopPropagation()">
-      <button class="modal-close" (click)="closeMarginModal()" aria-label="Close">✕</button>
-      <h3>Add Margin</h3>
-      <p class="modal-subtitle">{{ order.garmentType }} — {{ customerName(order) }}</p>
-      <p class="modal-budget">Tailor's quote: <strong>₹{{ order.tailorQuote }}</strong></p>
+<!-- Order Details + Manual Status Update modal -->
+@if (activeOrder(); as order) {
+  <div class="modal-backdrop" (click)="closeOrderDetails()">
+    <div class="modal modal-large" (click)="$event.stopPropagation()">
+      <button class="modal-close" (click)="closeOrderDetails()" aria-label="Close">✕</button>
+      <h3>{{ order.garmentType }}</h3>
+      <p class="modal-subtitle">Order placed {{ order.createdAt | date: 'dd MMM yyyy' }}</p>
 
-      <label>Your Margin (₹)</label>
-      <input type="number" [ngModel]="adminMargin()" (ngModelChange)="adminMargin.set($event)" placeholder="Platform's cut">
+      <div class="detail-grid">
+        <div class="detail-block">
+          <span class="detail-label">Customer</span>
+          <span class="detail-value">{{ customerName(order) }}</span>
+          @if (customerPhone(order) !== '—') {
+            <a class="phone-link" href="tel:{{ customerPhone(order) }}">📞 {{ customerPhone(order) }}</a>
+          }
+        </div>
 
-      @if (computedFinalPrice !== null) {
-        <p class="final-price">Final price to customer: <strong>₹{{ computedFinalPrice }}</strong></p>
+        <div class="detail-block">
+          <span class="detail-label">Tailor</span>
+          <span class="detail-value">{{ tailorName(order) }}</span>
+          @if (tailorPhone(order) !== '—') {
+            <a class="phone-link" href="tel:{{ tailorPhone(order) }}">📞 Call {{ tailorPhone(order) }}</a>
+          }
+        </div>
+
+        <div class="detail-block">
+          <span class="detail-label">Budget Range</span>
+          <span class="detail-value">₹{{ order.budgetMin }} – ₹{{ order.budgetMax }}</span>
+        </div>
+
+        <div class="detail-block">
+          <span class="detail-label">Expected Delivery</span>
+          <span class="detail-value">{{ order.expectedDelivery | date: 'dd MMM yyyy' }}</span>
+        </div>
+
+        <div class="detail-block">
+          <span class="detail-label">Fabric Color</span>
+          <span class="detail-value">{{ order.fabricColor || 'Not specified' }}</span>
+        </div>
+
+        <div class="detail-block">
+          <span class="detail-label">Current Status</span>
+          <span class="status" [class]="statusClass(order.status)">{{ order.status }}</span>
+        </div>
+      </div>
+
+      @if (order.description) {
+        <div class="detail-block full-width">
+          <span class="detail-label">Customer's Description / Special Requests</span>
+          <span class="detail-value">{{ order.description }}</span>
+        </div>
       }
 
+      @if (order.images && order.images.length) {
+        <div class="detail-block full-width">
+          <span class="detail-label">Reference Images ({{ order.images.length }})</span>
+          <div class="image-strip">
+            @for (img of order.images; track img) {
+              <img [src]="img" alt="Reference" class="ref-image">
+            }
+          </div>
+        </div>
+      }
+
+      <!-- @if (order.adminNotes) {
+        <div class="detail-block full-width">
+          <span class="detail-label">Previous Admin Notes</span>
+          <span class="detail-value">{{ order.adminNotes }}</span>
+        </div>
+      } -->
+
+      <hr class="modal-divider">
+
+      <label>Update Status</label>
+      <select [ngModel]="selectedStatus()" (ngModelChange)="selectedStatus.set($event)">
+        @for (status of statusOptions; track status) {
+          <option [value]="status">{{ status }}</option>
+        }
+      </select>
+
       <label>Internal Notes (optional)</label>
-      <textarea [ngModel]="adminNotes()" (ngModelChange)="adminNotes.set($event)" placeholder="Not shown to customer"></textarea>
+      <textarea
+        [ngModel]="statusNotes()"
+        (ngModelChange)="statusNotes.set($event)"
+        placeholder="e.g. Called tailor, confirmed availability for 12 Jul"
+      ></textarea>
 
       <button
         class="submit-btn"
-        [disabled]="submitting() || !adminMargin()"
-        (click)="submitMargin()"
+        [disabled]="submitting()"
+        (click)="submitStatusUpdate()"
       >
-        {{ submitting() ? 'Submitting…' : 'Confirm Final Price' }}
+        {{ submitting() ? 'Updating…' : 'Update Status' }}
       </button>
     </div>
   </div>

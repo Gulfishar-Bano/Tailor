@@ -4,12 +4,11 @@ import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors,R
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from '../../services/order';
 import { AuthService } from '../../services/auth';
-import { Navbar } from '../navbar/navbar'; // adjust path to match your project
 
 @Component({
   selector: 'app-order-new',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, Navbar],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './order-new.html',
   styleUrl: './order-new.scss',
 })
@@ -26,6 +25,13 @@ export class OrderNew implements OnInit {
   errorMessage = signal<string | null>(null);
   orderPlaced = signal(false); // drives the success popup
 
+  // --- Reference images ---
+  referenceImages = signal<string[]>([]); // uploaded URLs, ready to submit
+  uploadingImages = signal(false);
+  imageError = signal<string | null>(null);
+  private readonly MAX_IMAGES = 5;
+  private readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
   garmentTypes = [
     'Blouse', 'Kurti', 'Salwar Suit', 'Lehenga', 'Bridal Wear',
     "Men's Shirt", "Men's Pant", 'Coat & Suit', 'Kids Wear', 'Alteration', 'All Types',
@@ -33,52 +39,83 @@ export class OrderNew implements OnInit {
   stitchingTypes = ['New Stitching', 'Alteration', 'Repair'];
   fitOptions = ['Slim Fit', 'Regular Fit', 'Loose Fit'];
 
-  // orderForm = this.fb.group({
-  //   garmentType: ['', Validators.required],
-  //   stitchingType: ['', Validators.required],
-  //   style: ['', Validators.required],
-  //   expectedDelivery: ['', Validators.required],
+  orderForm = this.fb.group({
+    garmentType: ['', Validators.required],
+    stitchingType: ['', Validators.required],
+    style: ['', Validators.required],
+    expectedDelivery: ['', Validators.required],
+    budgetMin: [500, [Validators.required, Validators.min(1)]],
+    budgetMax: [2000, [Validators.required, Validators.min(1)]],
+    occasion: [''],
+    neckDesign: [''],
+    sleeveType: [''],
+    fit: [''],
+    fabric: [''],
+    fabricColor: [''],
+    embroidery: [false],
+    description: [''],
+  }, { validators: this.budgetRangeValidator });
 
-  //   occasion: [''],
-  //   neckDesign: [''],
-  //   sleeveType: [''],
-  //   fit: [''],
-  //   fabric: [''],
-  //   fabricColor: [''],
-  //   embroidery: [false],
-  //   description: [''],
-  // });
-
-orderForm = this.fb.group({
-  garmentType: ['', Validators.required],
-  stitchingType: ['', Validators.required],
-  style: ['', Validators.required],
-  expectedDelivery: ['', Validators.required],
-  budgetMin: [500, [Validators.required, Validators.min(1)]],
-  budgetMax: [2000, [Validators.required, Validators.min(1)]],
-  occasion: [''],
-  neckDesign: [''],
-  sleeveType: [''],
-  fit: [''],
-  fabric: [''],
-  fabricColor: [''],
-  embroidery: [false],
-  description: [''],
-}, { validators: this.budgetRangeValidator });
-
-budgetRangeValidator(group: AbstractControl): ValidationErrors | null {
-  const min = group.get('budgetMin')?.value;
-  const max = group.get('budgetMax')?.value;
-  if (min != null && max != null && Number(max) < Number(min)) {
-    return { budgetRangeInvalid: true };
+  budgetRangeValidator(group: AbstractControl): ValidationErrors | null {
+    const min = group.get('budgetMin')?.value;
+    const max = group.get('budgetMax')?.value;
+    if (min != null && max != null && Number(max) < Number(min)) {
+      return { budgetRangeInvalid: true };
+    }
+    return null;
   }
-  return null;
-}
+
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(params => {
       this.tailorId.set(params.get('tailorId'));
     });
   }
+
+  // ------------------------------------------------------------------
+  // Reference images
+  // ------------------------------------------------------------------
+
+  onFilesSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const files = Array.from(input.files);
+    this.imageError.set(null);
+
+    if (this.referenceImages().length + files.length > this.MAX_IMAGES) {
+      this.imageError.set(`You can upload up to ${this.MAX_IMAGES} images.`);
+      input.value = '';
+      return;
+    }
+
+    const oversized = files.find(f => f.size > this.MAX_FILE_SIZE);
+    if (oversized) {
+      this.imageError.set(`"${oversized.name}" is over 5MB — please choose a smaller image.`);
+      input.value = '';
+      return;
+    }
+
+    this.uploadingImages.set(true);
+    this.orderService.uploadImages(files).subscribe({
+      next: (res) => {
+        this.referenceImages.update(current => [...current, ...res.urls]);
+        this.uploadingImages.set(false);
+        input.value = ''; // allow re-selecting the same file later if removed
+      },
+      error: (err) => {
+        console.error(err);
+        this.imageError.set('Upload failed — please try again.');
+        this.uploadingImages.set(false);
+        input.value = '';
+      },
+    });
+  }
+
+  removeImage(url: string) {
+    this.referenceImages.update(current => current.filter(img => img !== url));
+  }
+
+  // ------------------------------------------------------------------
 
   onSubmit() {
     const customer = this.authService.getCurrentUser();
@@ -97,6 +134,7 @@ budgetRangeValidator(group: AbstractControl): ValidationErrors | null {
     const payload = {
       customerId: customer.id,
       tailorId: this.tailorId(),
+      images: this.referenceImages(),
       ...this.orderForm.value,
     };
 

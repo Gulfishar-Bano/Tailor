@@ -95,6 +95,16 @@ async getTailorsByCity(
   }
     
 
+async updatePortfolio(tailorId: string, images: string[]) {
+  const tailor = await this.userModel.findById(tailorId);
+  if (!tailor) throw new NotFoundException('Tailor not found');
+
+  tailor.portfolioImages = images; // replaces the full set — frontend sends the complete list each time
+  await tailor.save();
+
+  const { password, ...safeTailor } = tailor.toObject();
+  return safeTailor;
+}
 
 }
 

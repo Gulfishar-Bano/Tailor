@@ -1,83 +1,88 @@
-<div class="dashboard-page">
-
 <app-navbar></app-navbar>
+
+<div class="dashboard-page">
 
   <!-- ===================== Hero ===================== -->
   <section class="hero">
-    <span class="eyebrow">Customer dashboard</span>
-    <h1>Welcome back, {{ userName || 'Gulfisha' }} 👋</h1>
-    <p>Your measurements are saved and your last order is on track — what would you like to do today?</p>
-    <button class="cta" routerLink="/customer/tailors">Find a Tailor</button>
+    <div class="hero-glow"></div>
 
-    <!-- bind these to real values from your order/measurement services -->
+    <span class="eyebrow">Customer dashboard</span>
+    <h1>Welcome back, <span class="highlight">{{ userName || 'Gulfisha' }}</span> 👋</h1>
+    <p>Your measurements are saved and your last order is on track — what would you like to do today?</p>
+    <button class="cta" (click)="openFindTailorFlow()">
+      <span>Ready to get your outfit stitched?</span>
+      <span class="cta-arrow">→</span>
+    </button>
+
     <div class="hero-stats">
       <div class="stat">
-        <span class="stat-value">{{ activeOrders || 2 }}</span>
-        <span class="stat-label">Active Orders</span>
+        <span class="stat-icon">📦</span>
+        <div>
+          <span class="stat-value">{{ activeOrders || 2 }}</span>
+          <span class="stat-label">Active Orders</span>
+        </div>
       </div>
       <span class="stat-divider"></span>
       <div class="stat">
-        <span class="stat-value">{{ savedMeasurements || 3 }}</span>
-        <span class="stat-label">Saved Measurements</span>
+        <span class="stat-icon">📏</span>
+        <div>
+          <span class="stat-value">{{ savedMeasurements || 3 }}</span>
+          <span class="stat-label">Saved Measurements</span>
+        </div>
       </div>
       <span class="stat-divider"></span>
       <div class="stat">
-        <span class="stat-value">{{ favoriteTailors || 5 }}</span>
-        <span class="stat-label">Favorite Tailors</span>
+        <span class="stat-icon">❤️</span>
+        <div>
+          <span class="stat-value">{{ favoriteTailors || 5 }}</span>
+          <span class="stat-label">Favorite Tailors</span>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ===================== Quick actions — flowing list, not boxed cards ===================== -->
+  <!-- ===================== Quick actions ===================== -->
   <section class="actions">
     <div class="section-head">
       <span class="eyebrow">Quick actions</span>
       <h2>What would you like to do today?</h2>
     </div>
 
-    <div class="action-list">
+    <div class="action-grid">
 
-      <a class="action-row" routerLink="/customer/tailors">
+      <div class="action-card featured" (click)="openFindTailorFlow()">
+        <span class="action-badge">Start here</span>
         <span class="action-icon">🧵</span>
-        <div class="action-copy">
-          <h3>Find Tailors</h3>
-          <p>Browse experienced tailors based on ratings, experience and previous work.</p>
-        </div>
-        <span class="action-arrow">→</span>
-      </a>
+        <h3>Find Tailors</h3>
+        <p>Browse experienced tailors based on ratings, experience and previous work.</p>
+        <span class="action-link">Get started <span class="action-arrow">→</span></span>
+      </div>
 
-      <a class="action-row" routerLink="/customer/orders">
+      <a class="action-card" routerLink="/customer/orders">
         <span class="action-icon">📦</span>
-        <div class="action-copy">
-          <h3>My Orders</h3>
-          <p>View your active and completed stitching orders.</p>
-        </div>
-        <span class="action-arrow">→</span>
+        <h3>My Orders</h3>
+        <p>View your active and completed stitching orders.</p>
+        <span class="action-link">View orders <span class="action-arrow">→</span></span>
       </a>
 
-      <a class="action-row" routerLink="/customer/measurements">
-        <span class="action-icon">📏</span>
-        <div class="action-copy">
-          <h3>Saved Measurements</h3>
-          <p>Save body measurements for faster future orders.</p>
-        </div>
-        <span class="action-arrow">→</span>
+      <a class="action-card" routerLink="/customer/measurements">
+        <span class="action-icon">📐</span>
+        <h3>Saved Measurements</h3>
+        <p>Save body measurements for faster future orders.</p>
+        <span class="action-link">Manage <span class="action-arrow">→</span></span>
       </a>
 
-      <a class="action-row" routerLink="/customer/profile">
+      <a class="action-card" routerLink="/customer/profile">
         <span class="action-icon">👤</span>
-        <div class="action-copy">
-          <h3>My Profile</h3>
-          <p>Update your profile, address and contact details.</p>
-        </div>
-        <span class="action-arrow">→</span>
+        <h3>My Profile</h3>
+        <p>Update your profile, address and contact details.</p>
+        <span class="action-link">Edit profile <span class="action-arrow">→</span></span>
       </a>
 
     </div>
   </section>
 
   <!-- ===================== Recent orders ===================== -->
-  <!-- replace with *ngFor over your real orders list -->
   <section class="recent">
     <div class="section-head">
       <span class="eyebrow">Recent activity</span>
@@ -86,6 +91,7 @@
 
     <div class="order-list">
       <div class="order-row">
+        <div class="order-swatch swatch-1"></div>
         <div class="order-main">
           <span class="order-title">Bridal Lehenga — Meera Tailors</span>
           <span class="order-date">Placed 28 Jun 2026</span>
@@ -94,6 +100,7 @@
       </div>
 
       <div class="order-row">
+        <div class="order-swatch swatch-2"></div>
         <div class="order-main">
           <span class="order-title">Men's Formal Shirt — Rajesh Stitching Co.</span>
           <span class="order-date">Placed 21 Jun 2026</span>
@@ -102,6 +109,7 @@
       </div>
 
       <div class="order-row">
+        <div class="order-swatch swatch-3"></div>
         <div class="order-main">
           <span class="order-title">Kurti Set — Ananya Designs</span>
           <span class="order-date">Delivered 10 Jun 2026</span>
@@ -116,3 +124,8 @@
   </footer>
 
 </div>
+
+<!-- ===================== Measurement choice popup ===================== -->
+@if (showMeasurementModal()) {
+  <app-measurement-choice-modal (closed)="showMeasurementModal.set(false)"></app-measurement-choice-modal>
+}

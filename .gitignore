@@ -8,3 +8,4 @@
 node_modules/
 dist/
 build/
+Backend/tailor/package-lock.json

@@ -1,4 +1,4 @@
-// src/app/features/admin/order-list/order-list.ts
+// order-list.ts
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -28,19 +28,20 @@ export class AdminOrderList implements OnInit {
 
   statusOptions = [
     'Pending Admin Review',
-    'Confirmed',
+    'Contacted Tailor',
+    'Confirmed by Tailor',
     'In Progress',
     'Ready for Fitting',
     'Completed',
     'Cancelled',
+    'Rejected by Tailor',
   ];
 
-  // --- Assign Price / margin modal state (now only for Tailor Quoted orders) ---
-  marginOrder = signal<AdminOrder | null>(null);
-  adminMargin = signal<number | null>(null);
-  adminNotes = signal('');
+  // --- Details / status update modal state ---
+  activeOrder = signal<AdminOrder | null>(null);
+  selectedStatus = signal('');
+  statusNotes = signal('');
   submitting = signal(false);
-  sendingToTailor = signal<string | null>(null); // orderId currently being forwarded
 
   ngOnInit(): void {
     this.fetchOrders();
@@ -85,72 +86,53 @@ export class AdminOrderList implements OnInit {
     return typeof order.customerId === 'object' ? order.customerId.name : order.customerId;
   }
 
+  customerPhone(order: AdminOrder): string {
+    return typeof order.customerId === 'object' ? (order.customerId?.phone ?? '—') : '—';
+  }
+
   tailorName(order: AdminOrder): string {
     if (!order.tailorId) return 'Unknown Tailor';
-    return typeof order.tailorId === 'object'
-      ? (order.tailorId.shopName || order.tailorId.name)
-      : order.tailorId;
+    return typeof order.tailorId === 'object' ? order.tailorId.name : order.tailorId;
+  }
+
+  tailorPhone(order: AdminOrder): string {
+    return typeof order.tailorId === 'object' ? (order.tailorId?.phone ?? '—') : '—';
   }
 
   statusClass(status: string): string {
     const s = status.toLowerCase();
     if (s.includes('pending')) return 'status-pending';
-    if (s.includes('progress') || s.includes('confirmed')) return 'status-active';
-    if (s.includes('completed')) return 'status-done';
-    if (s.includes('cancelled')) return 'status-cancelled';
+    if (s.includes('progress') || s.includes('confirmed') || s.includes('contacted')) return 'status-active';
+    if (s.includes('completed') || s.includes('ready')) return 'status-done';
+    if (s.includes('cancelled') || s.includes('rejected')) return 'status-cancelled';
     return '';
   }
 
   // ------------------------------------------------------------------
-  // Step 1: send to tailor for their own quote
+  // View details + manually update status after calling the tailor
   // ------------------------------------------------------------------
 
-  sendToTailor(order: AdminOrder): void {
-    this.sendingToTailor.set(order._id);
-    this.orderService.forwardToTailor(order._id).subscribe({
-      next: () => {
-        this.sendingToTailor.set(null);
-        this.fetchOrders();
-      },
-      error: (err: any) => {
-        console.error(err);
-        this.sendingToTailor.set(null);
-      },
-    });
+  openOrderDetails(order: AdminOrder): void {
+    this.activeOrder.set(order);
+    this.selectedStatus.set(order.status);
+    this.statusNotes.set(order.adminNotes ?? '');
   }
 
-  // ------------------------------------------------------------------
-  // Step 2: add margin once tailor has responded (Tailor Quoted status)
-  // ------------------------------------------------------------------
-
-  openMarginModal(order: AdminOrder): void {
-    this.marginOrder.set(order);
-    this.adminMargin.set(null);
-    this.adminNotes.set('');
+  closeOrderDetails(): void {
+    this.activeOrder.set(null);
   }
 
-  closeMarginModal(): void {
-    this.marginOrder.set(null);
-  }
-
-  get computedFinalPrice(): number | null {
-    const order = this.marginOrder();
-    const margin = this.adminMargin();
-    if (!order?.tailorQuote || margin == null) return null;
-    return order.tailorQuote + margin;
-  }
-
-  submitMargin(): void {
-    const order = this.marginOrder();
-    const margin = this.adminMargin();
-    if (!order || margin == null || margin <= 0) return;
+  submitStatusUpdate(): void {
+    const order = this.activeOrder();
+    const status = this.selectedStatus();
+    if (!order || !status) return;
 
     this.submitting.set(true);
 
-    this.orderService.addMargin(order._id, margin, this.adminNotes()).subscribe({
+    this.orderService.updateOrderStatus(order._id, status, this.statusNotes()).subscribe({
       next: () => {
         this.submitting.set(false);
-        this.closeMarginModal();
+        this.closeOrderDetails();
         this.fetchOrders();
       },
       error: (err: any) => {

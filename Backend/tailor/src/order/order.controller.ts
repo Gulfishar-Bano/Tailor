@@ -1,9 +1,15 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, UseInterceptors ,BadRequestException,UploadedFiles} from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { SubmitQuoteDto } from './dto/submit-quote.dto';
 import { RejectOrderDto } from './dto/Reject-order.dto';
 //import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
+
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+import { v4 as uuid } from 'uuid';
+
 
 @Controller('orders')
 export class OrderController {
@@ -85,4 +91,33 @@ export class OrderController {
   ) {
     return this.orderService.rejectOrder(orderId, dto);
   }
+
+  // ADD to your existing order.controller.ts
+ // npm install uuid  &&  npm install -D @types/uuid
+
+// ... your existing imports/controller class stays as-is, just add this method:
+
+@Post('upload-images')
+@UseInterceptors(
+  FilesInterceptor('images', 5, {
+    storage: diskStorage({
+      destination: './uploads',
+      filename: (req, file, callback) => {
+        const uniqueName = `${uuid()}${extname(file.originalname)}`;
+        callback(null, uniqueName);
+      },
+    }),
+    fileFilter: (req, file, callback) => {
+      if (!file.mimetype.match(/\/(jpg|jpeg|png|webp)$/)) {
+        return callback(new BadRequestException('Only image files are allowed'), false);
+      }
+      callback(null, true);
+    },
+    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB per file
+  }),
+)
+uploadImages(@UploadedFiles() files: Express.Multer.File[]) {
+  const urls = files.map(file => `http://localhost:3000/uploads/${file.filename}`);
+  return { urls };
+}
 }

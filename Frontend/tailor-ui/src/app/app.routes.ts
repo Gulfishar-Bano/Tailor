@@ -9,11 +9,13 @@ import { TailorList } from './features/customer/tailor-list/tailor-list';
 import  {OrderNew } from './features/order-new/order-new';
 import { OrderList } from './features/order-list/order-list';
 import { CustomerProfile } from './features/profile/profile'; // adjust path if placed elsewhere
-import { Measurements } from './features/measurement/measurement'; // adjust path if placed elsewhere
+import { MeasurementChoiceModal } from './features/measurement-choice-modal/measurement-choice-modal'; // adjust path if placed elsewhere
 import {AdminDashboard} from './features/admin/dashboard/dashboard'; 
 // app.routes.ts
 import { AdminOrderList } from './features/admin/order-list/order-list';
 import {TailorDashboard} from './features/tailor/dashboard/dashboard';
+import { TailorPortfolio } from './features/tailor/tailor-portfolio/tailor-portfolio';
+
 
 
 export const routes: Routes = [
@@ -68,7 +70,7 @@ export const routes: Routes = [
 },
 {
   path: 'customer/measurements',
-  component: Measurements,
+  component: MeasurementChoiceModal,
 },
 
  {
@@ -87,6 +89,7 @@ export const routes: Routes = [
   path: 'tailor/dashboard',
   component: TailorDashboard,
 },
-
+{ path: 'tailor/portfolio',
+   component: TailorPortfolio },
 
 ];

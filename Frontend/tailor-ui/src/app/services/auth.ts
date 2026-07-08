@@ -13,7 +13,6 @@ export interface CurrentUser {
 interface LoginResponse {
   message: string;
   user: CurrentUser;
- 
 }
 
 @Injectable({
@@ -26,12 +25,10 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  // REGISTER API
   register(data: any) {
     return this.http.post(`${this.baseUrl}/auth/register`, data);
   }
 
-  // LOGIN API — stores the returned user so the rest of the app can read it back
   login(data: any) {
     return this.http.post<LoginResponse>(`${this.baseUrl}/auth/login`, data).pipe(
       tap(res => {
@@ -44,13 +41,14 @@ export class AuthService {
     return this.http.get(`${this.baseUrl}/user/tailor/list`);
   }
 
-   getTailorById(id: string) {
+  // full profile — specialization/experience/city/bio/portfolioImages included
+  getTailorById(id: string) {
     return this.http.get<any>(`${this.baseUrl}/user/tailor/${id}`);
   }
 
-  // ---------------------------------------------------------------------
-  // Session helpers
-  // ---------------------------------------------------------------------
+  updateTailorPortfolio(tailorId: string, images: string[]) {
+    return this.http.patch(`${this.baseUrl}/user/tailor/${tailorId}/portfolio`, { images });
+  }
 
   setCurrentUser(user: CurrentUser): void {
     localStorage.setItem(this.userKey, JSON.stringify(user));
@@ -75,11 +73,11 @@ export class AuthService {
     localStorage.removeItem(this.userKey);
   }
 
-  
   createOrder(data: any) {
     return this.http.post(`${this.baseUrl}/orders/create`, data);
   }
-   getMyOrders(customerId: string) {
+
+  getMyOrders(customerId: string) {
     return this.http.get<any[]>(`${this.baseUrl}/orders/customer/${customerId}`);
   }
 }

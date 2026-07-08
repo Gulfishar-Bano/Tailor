@@ -27,6 +27,9 @@ private router = inject(Router);
     phone: ['', Validators.required],
 
     password: ['', [Validators.required, Validators.minLength(6)]],
+      gender: [''],
+  age: [null],
+  location: [''],
     role:['', Validators.required],
      experience: [''],
 

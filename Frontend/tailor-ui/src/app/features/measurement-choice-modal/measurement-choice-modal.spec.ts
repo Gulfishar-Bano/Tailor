@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Measurement } from './measurement';
+import { measurement-choice-modal } from './measurement-choice-modal';
 
-describe('Measurement', () => {
-  let component: Measurement;
-  let fixture: ComponentFixture<Measurement>;
+describe('MeasurementChoiceModal', () => {
+  let component: MeasurementChoiceModal;
+  let fixture: ComponentFixture<MeasurementChoiceModal>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Measurement],
+      imports: [MeasurementChoiceModal],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Measurement);
+    fixture = TestBed.createComponent(MeasurementChoiceModal);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

@@ -6,6 +6,7 @@ import {
   IsOptional,
   IsPositive,
   IsString,
+  IsArray,
 } from 'class-validator';
 
 export class CreateOrderDto {
@@ -68,6 +69,11 @@ export class CreateOrderDto {
   @IsString()
   @IsOptional()
   description?: string;
+
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  images?: string[];
 
   @IsDateString()
   @IsNotEmpty()

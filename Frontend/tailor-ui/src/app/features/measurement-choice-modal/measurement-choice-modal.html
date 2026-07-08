@@ -1,0 +1,90 @@
+
+<div class="modal-backdrop" (click)="close()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <button class="modal-close" (click)="close()">✕</button>
+
+    @switch (step()) {
+
+      @case ('choice') {
+        <div class="modal-icon">📏</div>
+        <h3>How would you like to get measured?</h3>
+        <p class="modal-sub">Accurate measurements help your tailor get the fit right the first time.</p>
+
+        <div class="choice-list">
+          <button class="choice-card" (click)="chooseManual()">
+            <span class="choice-icon">✍️</span>
+            <div class="choice-copy">
+              <h4>Enter Manually</h4>
+              <p>Already know your measurements? Add them yourself in a couple of minutes.</p>
+            </div>
+            <span class="choice-arrow">→</span>
+          </button>
+
+          <button class="choice-card featured" (click)="chooseDoorstep()">
+            <span class="choice-badge">Recommended</span>
+            <span class="choice-icon">🚪</span>
+            <div class="choice-copy">
+              <h4>Doorstep Service</h4>
+              <p>We'll send someone to measure you and pick up your fabric — free of cost.</p>
+            </div>
+            <span class="choice-arrow">→</span>
+          </button>
+        </div>
+
+        <button class="skip-link" (click)="proceedToTailors()">Skip for now, browse tailors first</button>
+      }
+
+      @case ('doorstep-form') {
+        <button class="back-link" (click)="backToChoice()">← Back</button>
+
+        <div class="modal-icon">🚪</div>
+        <h3>Book Doorstep Measurement</h3>
+        <p class="modal-sub">Our executive will visit you to take measurements and collect fabric if needed.</p>
+
+        <form [formGroup]="doorstepForm" (ngSubmit)="submitDoorstepRequest()" class="doorstep-form">
+          <div class="form-field">
+            <label>Address</label>
+            <textarea formControlName="address" placeholder="House no, street, area, city, pincode"></textarea>
+            @if (doorstepForm.get('address')?.invalid && doorstepForm.get('address')?.touched) {
+              <p class="error-message">Please enter your address.</p>
+            }
+          </div>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label>Preferred Date</label>
+              <input type="date" formControlName="preferredDate">
+              @if (doorstepForm.get('preferredDate')?.invalid && doorstepForm.get('preferredDate')?.touched) {
+                <p class="error-message">Please pick a date.</p>
+              }
+            </div>
+
+            <div class="form-field">
+              <label>Preferred Time</label>
+              <select formControlName="preferredTime">
+                <option value="morning">Morning (9 AM – 12 PM)</option>
+                <option value="afternoon">Afternoon (12 PM – 4 PM)</option>
+                <option value="evening">Evening (4 PM – 7 PM)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label>Notes (optional)</label>
+            <textarea formControlName="notes" placeholder="Any specific instructions..."></textarea>
+          </div>
+
+          <button type="submit" class="submit-btn">Request Doorstep Visit</button>
+        </form>
+      }
+
+      @case ('confirmed') {
+        <div class="modal-icon">✅</div>
+        <h3>Request Received!</h3>
+        <p class="modal-sub">Our team will call you shortly to confirm the visit. Meanwhile, feel free to browse tailors.</p>
+        <button class="modal-cta" (click)="proceedToTailors()">Browse Tailors</button>
+      }
+
+    }
+  </div>
+</div>
