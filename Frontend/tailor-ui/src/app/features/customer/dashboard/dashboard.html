@@ -3,8 +3,11 @@
 <div class="dashboard-page">
 
   <!-- ===================== Hero ===================== -->
-  <section class="hero">
+  <section class="hero" appRevealOnScroll>
     <div class="hero-glow"></div>
+    <div class="floating-shape shape-1"></div>
+    <div class="floating-shape shape-2"></div>
+    <div class="floating-shape shape-3"></div>
 
     <span class="eyebrow">Customer dashboard</span>
     <h1>Welcome back, <span class="highlight">{{ userName || 'Gulfisha' }}</span> 👋</h1>
@@ -41,8 +44,45 @@
     </div>
   </section>
 
+  <!-- ===================== Shop by category carousel ===================== -->
+<section class="category-section">
+  <div class="section-head">
+    <span class="eyebrow">Browse by category</span>
+    <h2>What are you getting stitched?</h2>
+  </div>
+
+  <div class="carousel-wrapper">
+    <button class="carousel-nav nav-left" (click)="scrollCategories('left')" aria-label="Scroll left">‹</button>
+
+    <div class="category-viewport">
+      <div class="category-track" #categoryTrack>
+        @for (cat of categories; track cat.name + '-a') {
+          <a class="category-card" [routerLink]="['/customer/tailors']" [queryParams]="{ category: cat.name }">
+            <div class="category-image-wrap">
+              <img [src]="cat.image" [alt]="cat.name" loading="lazy">
+              <div class="category-overlay"></div>
+              <span class="category-label">{{ cat.name }}</span>
+            </div>
+          </a>
+        }
+        @for (cat of categories; track cat.name + '-b') {
+          <a class="category-card" [routerLink]="['/customer/tailors']" [queryParams]="{ category: cat.name }" aria-hidden="true">
+            <div class="category-image-wrap">
+              <img [src]="cat.image" [alt]="cat.name" loading="lazy">
+              <div class="category-overlay"></div>
+              <span class="category-label">{{ cat.name }}</span>
+            </div>
+          </a>
+        }
+      </div>
+    </div>
+
+    <button class="carousel-nav nav-right" (click)="scrollCategories('right')" aria-label="Scroll right">›</button>
+  </div>
+</section>
+
   <!-- ===================== Quick actions ===================== -->
-  <section class="actions">
+  <section class="actions" appRevealOnScroll>
     <div class="section-head">
       <span class="eyebrow">Quick actions</span>
       <h2>What would you like to do today?</h2>
@@ -82,8 +122,40 @@
     </div>
   </section>
 
+  <!-- ===================== Recently stitched (real portfolio photos) ===================== -->
+  <section class="portfolio-section" appRevealOnScroll>
+    <div class="section-head">
+      <span class="eyebrow">Real work, real tailors</span>
+      <h2>Recently Stitched</h2>
+      @if (portfolioItems().length > 0) {
+        <div class="carousel-nav">
+          <button (click)="scrollPortfolio('left')" aria-label="Scroll left">‹</button>
+          <button (click)="scrollPortfolio('right')" aria-label="Scroll right">›</button>
+        </div>
+      }
+    </div>
+
+    @if (loadingPortfolio()) {
+      <p class="info-text">Loading…</p>
+    } @else if (portfolioItems().length === 0) {
+      <div class="portfolio-empty">
+        <span class="portfolio-empty-icon">🧵</span>
+        <p>Portfolio photos from our tailors are coming soon.</p>
+      </div>
+    } @else {
+      <div class="carousel-track" #portfolioTrack>
+        @for (item of portfolioItems(); track item.img) {
+          <div class="portfolio-card">
+            <img [src]="item.img" alt="Work by {{ item.tailorName }}">
+            <span class="portfolio-caption">{{ item.tailorName }}</span>
+          </div>
+        }
+      </div>
+    }
+  </section>
+
   <!-- ===================== Recent orders ===================== -->
-  <section class="recent">
+  <section class="recent" appRevealOnScroll>
     <div class="section-head">
       <span class="eyebrow">Recent activity</span>
       <h2>Latest orders</h2>

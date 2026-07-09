@@ -38,7 +38,7 @@ export class AuthService {
   }
 
   getTailors() {
-    return this.http.get(`${this.baseUrl}/user/tailor/list`);
+    return this.http.get<any[]>(`${this.baseUrl}/user/tailor/list`);
   }
 
   // full profile — specialization/experience/city/bio/portfolioImages included
@@ -48,6 +48,10 @@ export class AuthService {
 
   updateTailorPortfolio(tailorId: string, images: string[]) {
     return this.http.patch(`${this.baseUrl}/user/tailor/${tailorId}/portfolio`, { images });
+  }
+
+  updateTailorProfile(tailorId: string, updates: any) {
+    return this.http.patch(`${this.baseUrl}/user/tailor/${tailorId}`, updates);
   }
 
   setCurrentUser(user: CurrentUser): void {

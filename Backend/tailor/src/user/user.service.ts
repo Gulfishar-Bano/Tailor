@@ -83,6 +83,13 @@ async getTailorsByCity(
   });
 }
 
+    
+
+// Add this method to your existing UserController (wherever /user/tailor/list lives)
+
+
+
+// And these methods to your existing UserService
 
   async getTailorProfile(id: string) {
     const tailor = await this.userModel.findById(id).lean();
@@ -93,18 +100,28 @@ async getTailorsByCity(
     const { password, ...safeTailor } = tailor;
     return safeTailor;
   }
-    
 
-async updatePortfolio(tailorId: string, images: string[]) {
-  const tailor = await this.userModel.findById(tailorId);
-  if (!tailor) throw new NotFoundException('Tailor not found');
+  async updatePortfolio(tailorId: string, images: string[]) {
+    const tailor = await this.userModel.findById(tailorId);
+    if (!tailor) throw new NotFoundException('Tailor not found');
 
-  tailor.portfolioImages = images; // replaces the full set — frontend sends the complete list each time
-  await tailor.save();
+    tailor.portfolioImages = images; // replaces the full set each save
+    await tailor.save();
 
-  const { password, ...safeTailor } = tailor.toObject();
-  return safeTailor;
-}
+    const { password, ...safeTailor } = tailor.toObject();
+    return safeTailor;
+  }
+
+  async updateTailorProfile(tailorId: string, updates: Partial<any>) {
+    const tailor = await this.userModel.findById(tailorId);
+    if (!tailor) throw new NotFoundException('Tailor not found');
+
+    Object.assign(tailor, updates);
+    await tailor.save();
+
+    const { password, ...safeTailor } = tailor.toObject();
+    return safeTailor;
+  }
 
 }
 

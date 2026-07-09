@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ReviewService } from './review.service';
 import { CreateReviewDto } from './dto/create-review.dto';
+import { CreateAdminReviewDto } from './dto/create-admin-review.dto';
 
 @Controller('reviews')
 export class ReviewController {
@@ -9,6 +10,12 @@ export class ReviewController {
   @Post('create')
   createReview(@Body() dto: CreateReviewDto) {
     return this.reviewService.createReview(dto);
+  }
+
+  // NOTE: needs an admin-only auth guard eventually
+  @Post('admin/create')
+  createAdminReview(@Body() dto: CreateAdminReviewDto) {
+    return this.reviewService.createAdminReview(dto);
   }
 
   @Get('tailor/:tailorId')

@@ -19,4 +19,8 @@ export class ReviewService {
   createReview(data: { tailorId: string; customerId: string; orderId: string; rating: number; comment?: string }) {
     return this.http.post(`${this.baseUrl}/reviews/create`, data);
   }
+
+  createAdminReview(data: { tailorId: string; customerName?: string; rating: number; comment?: string }) {
+    return this.http.post(`${this.baseUrl}/reviews/admin/create`, data);
+  }
 }

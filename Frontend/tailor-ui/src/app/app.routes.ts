@@ -11,10 +11,12 @@ import { OrderList } from './features/order-list/order-list';
 import { CustomerProfile } from './features/profile/profile'; // adjust path if placed elsewhere
 import { MeasurementChoiceModal } from './features/measurement-choice-modal/measurement-choice-modal'; // adjust path if placed elsewhere
 import {AdminDashboard} from './features/admin/dashboard/dashboard'; 
-// app.routes.ts
+
 import { AdminOrderList } from './features/admin/order-list/order-list';
 import {TailorDashboard} from './features/tailor/dashboard/dashboard';
 import { TailorPortfolio } from './features/tailor/tailor-portfolio/tailor-portfolio';
+
+import { AdminTailorList } from './features/admin/admin-tailor-list/admin-tailor-list'; // adjust path
 
 
 
@@ -91,5 +93,12 @@ export const routes: Routes = [
 },
 { path: 'tailor/portfolio',
    component: TailorPortfolio },
+
+
+
+{
+  path: 'admin/tailors',
+  component: AdminTailorList,
+},
 
 ];

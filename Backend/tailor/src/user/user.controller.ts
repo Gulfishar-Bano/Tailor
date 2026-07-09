@@ -53,16 +53,25 @@ getTailorsByCity(
     return this.userService.getTailorProfile(id);
   }
  
-  // ADD to your existing UserController (wherever GET tailor/:id lives)
-
-@Patch('tailor/:id/portfolio')
-updatePortfolio(
-  @Param('id') id: string,
-  @Body('images') images: string[],
-) {
-  return this.userService.updatePortfolio(id, images);
-}
-
+  @Patch('tailor/:id/portfolio')
+  updatePortfolio(
+    @Param('id') id: string,
+    @Body('images') images: string[],
+  ) {
+    return this.userService.updatePortfolio(id, images);
+  }
+ 
+  // admin editing a tailor's profile directly (name/phone/city/specialization/experience/bio)
+  @Patch('tailor/:id')
+  updateTailorProfile(
+    @Param('id') id: string,
+    @Body() updates: Partial<{
+      name: string; phone: string; city: string;
+      specialization: string; experience: number; bio: string;
+    }>,
+  ) {
+    return this.userService.updateTailorProfile(id, updates);
+  }
 
 
  

@@ -1,0 +1,144 @@
+<app-admin-navbar></app-admin-navbar>
+
+<main class="admin-content">
+  <div class="page-head">
+    <span class="eyebrow">User Management</span>
+    <h1>Tailors</h1>
+    <p>{{ tailors().length }} tailors on the platform</p>
+  </div>
+
+  <input
+    type="text"
+    class="search-input"
+    placeholder="Search by name, specialization or city..."
+    [(ngModel)]="searchTerm"
+  >
+
+  @if (loading()) {
+    <p class="loading-text">Loading tailors...</p>
+  } @else if (errorMessage()) {
+    <p class="error-message">{{ errorMessage() }}</p>
+  } @else if (filteredTailors.length === 0) {
+    <p class="empty-state">No tailors found.</p>
+  } @else {
+    <div class="tailor-grid">
+      @for (tailor of filteredTailors; track tailor._id) {
+        <div class="tailor-card">
+          <div class="tailor-avatar">{{ tailor.name?.charAt(0) }}</div>
+          <h3>{{ tailor.name }}</h3>
+          <p class="tailor-meta">{{ tailor.specialization || 'No specialization set' }}</p>
+          <p class="tailor-meta">{{ tailor.city || '—' }} · {{ tailor.experience || 0 }} yrs</p>
+          <p class="tailor-meta">{{ tailor.phone }}</p>
+
+          <div class="tailor-actions">
+            <button (click)="openEdit(tailor)">Edit Profile</button>
+            <button (click)="openPortfolio(tailor)">Portfolio</button>
+            <button (click)="openReview(tailor)">Add Review</button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</main>
+
+<!-- ===================== Edit Profile modal ===================== -->
+@if (modalMode() === 'edit' && activeTailor(); as tailor) {
+  <div class="modal-backdrop" (click)="closeModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <button class="modal-close" (click)="closeModal()" aria-label="Close">✕</button>
+      <h3>Edit {{ tailor.name }}'s Profile</h3>
+
+      <label>Name</label>
+      <input type="text" [(ngModel)]="editName">
+
+      <label>Phone</label>
+      <input type="text" [(ngModel)]="editPhone">
+
+      <label>City</label>
+      <input type="text" [(ngModel)]="editCity">
+
+      <label>Specialization</label>
+      <input type="text" [(ngModel)]="editSpecialization">
+
+      <label>Experience (years)</label>
+      <input type="number" [(ngModel)]="editExperience">
+
+      <label>Bio</label>
+      <textarea [(ngModel)]="editBio"></textarea>
+
+      <button class="submit-btn" [disabled]="saving()" (click)="saveEdit()">
+        {{ saving() ? 'Saving…' : 'Save Changes' }}
+      </button>
+    </div>
+  </div>
+}
+
+<!-- ===================== Portfolio modal ===================== -->
+@if (modalMode() === 'portfolio' && activeTailor(); as tailor) {
+  <div class="modal-backdrop" (click)="closeModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <button class="modal-close" (click)="closeModal()" aria-label="Close">✕</button>
+      <h3>{{ tailor.name }}'s Portfolio</h3>
+
+      <input
+        type="file"
+        accept="image/png, image/jpeg, image/webp"
+        multiple
+        [disabled]="uploadingPortfolio() || portfolioImages().length >= 10"
+        (change)="onPortfolioFilesSelected($event)"
+      >
+
+      @if (uploadingPortfolio()) { <p class="hint">Uploading…</p> }
+      @if (portfolioError()) { <p class="error-message">{{ portfolioError() }}</p> }
+
+      @if (portfolioImages().length === 0) {
+        <p class="empty-state">No portfolio photos yet.</p>
+      } @else {
+        <div class="portfolio-grid">
+          @for (img of portfolioImages(); track img) {
+            <div class="portfolio-item">
+              <img [src]="img" alt="Portfolio photo">
+              <button type="button" class="remove-btn" (click)="removePortfolioImage(img)" aria-label="Remove">✕</button>
+            </div>
+          }
+        </div>
+      }
+
+      <button class="submit-btn" [disabled]="saving() || uploadingPortfolio()" (click)="savePortfolio()">
+        {{ saving() ? 'Saving…' : 'Save Portfolio' }}
+      </button>
+    </div>
+  </div>
+}
+
+<!-- ===================== Add Review modal ===================== -->
+@if (modalMode() === 'review' && activeTailor(); as tailor) {
+  <div class="modal-backdrop" (click)="closeModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <button class="modal-close" (click)="closeModal()" aria-label="Close">✕</button>
+      <h3>Add Review for {{ tailor.name }}</h3>
+      <p class="modal-subtitle">Collected by phone — no customer account needed.</p>
+
+      <label>Customer Name (optional)</label>
+      <input type="text" [(ngModel)]="reviewCustomerName" placeholder="e.g. Priya S.">
+
+      <label>Rating</label>
+      <div class="star-picker">
+        @for (star of starRow; track star) {
+          <span
+            class="pickable-star"
+            [class.filled]="star <= reviewRating"
+            (click)="setReviewRating(star)"
+          >★</span>
+        }
+      </div>
+
+      <label>Comment (optional)</label>
+      <textarea [(ngModel)]="reviewComment" placeholder="What did the customer say?"></textarea>
+
+      <button class="submit-btn" [disabled]="saving()" (click)="saveReview()">
+        {{ saving() ? 'Saving…' : 'Add Review' }}
+      </button>
+    </div>
+  </div>
+}
