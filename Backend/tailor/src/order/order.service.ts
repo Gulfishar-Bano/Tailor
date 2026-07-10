@@ -8,7 +8,7 @@ import { SubmitQuoteDto } from './dto/submit-quote.dto';
 
 //import { RejectOrderDto } from './dto/Reject-order.dto';
 //import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
-//import { MailService } from '../notification/mail.service';
+import { MailService } from './Mail.service';
 import { User } from '../user/schema/user.schema'; // adjust path if different
 
 const STATUS_FLOW = ['Confirmed', 'In Progress', 'Ready', 'Delivered'];
@@ -22,7 +22,7 @@ export class OrderService {
     @InjectModel(User.name)
     private readonly userModel: Model<User>,
 
-   // private readonly mailService: MailService,
+    private readonly mailService: MailService,
   ) {}
 
   async createOrder(createOrderDto: CreateOrderDto) {
@@ -59,7 +59,6 @@ export class OrderService {
 
     return orders.map(order => ({
       ...this.toCustomerSafeOrder(order),
-      // tailorName: tailorMap.get(order.tailorId) ?? 'Unknown Tailor',
       tailorName: tailorMap.get(order.tailorId.toString()) ?? 'Unknown Tailor',
     }));
   }
@@ -147,7 +146,7 @@ export class OrderService {
   async confirmOrder(orderId: string, customerId: string) {
     const order = await this.orderModel.findById(orderId);
     if (!order) throw new NotFoundException('Order not found');
-  if (order.customerId.toString() !== customerId) {
+    if (order.customerId.toString() !== customerId) {
       throw new BadRequestException('This order does not belong to you');
     }
     if (order.status !== 'Awaiting Customer Confirmation') {
@@ -165,7 +164,7 @@ export class OrderService {
   async cancelOrder(orderId: string, customerId: string) {
     const order = await this.orderModel.findById(orderId);
     if (!order) throw new NotFoundException('Order not found');
-  if (order.customerId.toString() !== customerId) {
+    if (order.customerId.toString() !== customerId) {
       throw new BadRequestException('This order does not belong to you');
     }
     if (order.status !== 'Awaiting Customer Confirmation') {
@@ -238,12 +237,12 @@ export class OrderService {
         this.userModel.findById(dto.tailorId),
       ]);
 
-      // if (customer?.email) {
-      //   this.mailService.sendOrderConfirmationToCustomer(customer.email, order);
-      // }
-      // if (tailor?.email) {
-      //   this.mailService.sendNewOrderAlertToTailor(tailor.email, order);
-      // }
+      if (customer?.email) {
+        this.mailService.sendOrderConfirmationToCustomer(customer.email, order);
+      }
+      if (tailor?.email) {
+        this.mailService.sendNewOrderAlertToTailor(tailor.email, order);
+      }
     } catch (err) {
       console.error('Failed to send order-created notifications', err);
     }
@@ -253,8 +252,7 @@ export class OrderService {
     try {
       const customer = await this.userModel.findById(order.customerId);
       if (customer?.email) {
-        // TODO: write a dedicated "your quote is ready, please confirm" email template
-        //this.mailService.sendOrderConfirmationToCustomer(customer.email, order);
+        this.mailService.sendQuoteReadyToCustomer(customer.email, order);
       }
     } catch (err) {
       console.error('Failed to send quote-ready notification', err);
@@ -265,7 +263,7 @@ export class OrderService {
     try {
       const tailor = await this.userModel.findById(order.tailorId);
       if (tailor?.email) {
-       // this.mailService.sendNewOrderAlertToTailor(tailor.email, order);
+        this.mailService.sendOrderConfirmedToTailor(tailor.email, order);
       }
     } catch (err) {
       console.error('Failed to notify tailor of confirmed order', err);

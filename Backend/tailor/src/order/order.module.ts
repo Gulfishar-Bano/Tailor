@@ -6,7 +6,7 @@ import { OrderService } from './order.service';
 
 import { Order, OrderSchema } from './schema/order.schema';
 import { User, UserSchema } from '../user/schema/user.schema'; // TODO: adjust to your actual User schema path/name
-
+import { MailService } from './Mail.service';
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -23,6 +23,6 @@ import { User, UserSchema } from '../user/schema/user.schema'; // TODO: adjust t
     ]),
   ],
   controllers: [OrderController],
-  providers: [OrderService],
+  providers: [OrderService,MailService],
 })
 export class OrderModule {}
