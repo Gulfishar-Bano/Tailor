@@ -150,6 +150,30 @@
         </div>
       }
 
+       @if (order.measurements) {
+        <div class="detail-block full-width">
+          <span class="detail-label">Customer's Saved Measurements</span>
+          <div class="measurements-grid">
+            @if (order.measurements.chest) { <span>Chest: {{ order.measurements.chest }}"</span> }
+            @if (order.measurements.waist) { <span>Waist: {{ order.measurements.waist }}"</span> }
+            @if (order.measurements.hip) { <span>Hip: {{ order.measurements.hip }}"</span> }
+            @if (order.measurements.shoulder) { <span>Shoulder: {{ order.measurements.shoulder }}"</span> }
+            @if (order.measurements.length) { <span>Length: {{ order.measurements.length }}"</span> }
+            @if (order.measurements.sleeveLength) { <span>Sleeve: {{ order.measurements.sleeveLength }}"</span> }
+            @if (order.measurements.neck) { <span>Neck: {{ order.measurements.neck }}"</span> }
+            @if (order.measurements.inseam) { <span>Inseam: {{ order.measurements.inseam }}"</span> }
+          </div>
+          @if (order.measurements.notes) {
+            <p class="measurement-notes">"{{ order.measurements.notes }}"</p>
+          }
+        </div>
+      } @else {
+        <div class="detail-block full-width">
+          <span class="detail-label">Customer's Saved Measurements</span>
+          <span class="detail-value">No measurements on file yet.</span>
+        </div>
+      }
+
       <!-- @if (order.adminNotes) {
         <div class="detail-block full-width">
           <span class="detail-label">Previous Admin Notes</span>

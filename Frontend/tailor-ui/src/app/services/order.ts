@@ -11,21 +11,29 @@ export interface AdminOrdersResponse {
 export interface AdminOrder {
   _id: string;
   customerId: { name: string; email: string; phone: string } | string | null;
-  tailorId: { name: string; phone?: string; city?: string; specialization?: string; shopName?: string } | string | null;
+  tailorId: { name: string; phone?: string; city?: string; specialization?: string } | string | null;
   garmentType: string;
-  style?: string;
   fabricColor?: string;
   description?: string;
   images?: string[];
   budgetMin?: number;
   budgetMax?: number;
-  tailorQuote?: number;
   status: string;
   adminNotes?: string;
   expectedDelivery: string;
   createdAt: string;
+  measurements?: {
+    chest?: number;
+    waist?: number;
+    hip?: number;
+    shoulder?: number;
+    length?: number;
+    sleeveLength?: number;
+    neck?: number;
+    inseam?: number;
+    notes?: string;
+  } | null;
 }
-
 @Injectable({
   providedIn: 'root',
 })
@@ -99,4 +107,14 @@ export class OrderService {
       adminMargin, adminNotes,
     });
   }
+requestDoorstepMeasurement(payload: {
+    customerId: string;
+    address: string;
+    preferredDate: string;
+    preferredTime: string;
+    notes?: string;
+  }) {
+    return this.http.post(`${this.baseUrl}/doorstep-requests`, payload);
+  }
+
 }

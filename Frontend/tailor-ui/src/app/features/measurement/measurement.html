@@ -1,0 +1,76 @@
+<!-- measurement.html -->
+<app-navbar></app-navbar>
+
+<div class="measurements-page">
+  <div class="measurements-container">
+    <h2>Your Measurements</h2>
+    <p class="subtitle">Save these once — we'll reuse them for every order you place.</p>
+
+    @if (loading()) {
+      <p class="info-text">Loading your saved measurements…</p>
+    } @else {
+      <form [formGroup]="measurementForm" (ngSubmit)="onSubmit()">
+
+        <div class="measurement-grid">
+          <div class="field">
+            <label>Chest (in)</label>
+            <input type="number" formControlName="chest" placeholder="e.g. 36">
+          </div>
+
+          <div class="field">
+            <label>Waist (in)</label>
+            <input type="number" formControlName="waist" placeholder="e.g. 32">
+          </div>
+
+          <div class="field">
+            <label>Hip (in)</label>
+            <input type="number" formControlName="hip" placeholder="e.g. 38">
+          </div>
+
+          <div class="field">
+            <label>Shoulder (in)</label>
+            <input type="number" formControlName="shoulder" placeholder="e.g. 15">
+          </div>
+
+          <div class="field">
+            <label>Length (in)</label>
+            <input type="number" formControlName="length" placeholder="e.g. 40">
+          </div>
+
+          <div class="field">
+            <label>Sleeve Length (in)</label>
+            <input type="number" formControlName="sleeveLength" placeholder="e.g. 22">
+          </div>
+
+          <div class="field">
+            <label>Neck (in)</label>
+            <input type="number" formControlName="neck" placeholder="e.g. 14">
+          </div>
+
+          <div class="field">
+            <label>Inseam (in)</label>
+            <input type="number" formControlName="inseam" placeholder="e.g. 30">
+          </div>
+        </div>
+
+        <div class="field full-width">
+          <label>Notes (optional)</label>
+          <textarea formControlName="notes" placeholder="Anything else the tailor should know about your fit preferences"></textarea>
+        </div>
+
+        @if (errorMessage()) {
+          <p class="error-message">{{ errorMessage() }}</p>
+        }
+
+        @if (saved()) {
+          <p class="success-message">✅ Measurements saved!</p>
+        }
+
+        <button type="submit" class="save-btn" [disabled]="saving()">
+          {{ saving() ? 'Saving…' : 'Save Measurements' }}
+        </button>
+
+      </form>
+    }
+  </div>
+</div>

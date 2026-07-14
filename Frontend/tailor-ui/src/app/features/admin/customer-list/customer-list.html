@@ -1,0 +1,126 @@
+<app-admin-navbar></app-admin-navbar>
+
+<main class="admin-content">
+  <div class="page-head">
+    <span class="eyebrow">User Management</span>
+    <h1>Customers</h1>
+    <p>{{ total() }} customers on the platform</p>
+  </div>
+
+  <input
+    type="text"
+    class="search-input"
+    placeholder="Search by name, email or phone..."
+    [(ngModel)]="searchTerm"
+    (keyup.enter)="onSearchChange()"
+  >
+
+  @if (loading()) {
+    <p class="loading-text">Loading customers...</p>
+  } @else if (errorMessage()) {
+    <p class="error-message">{{ errorMessage() }}</p>
+  } @else if (customers().length === 0) {
+    <p class="empty-state">No customers found.</p>
+  } @else {
+    <table class="customers-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Location</th>
+          <th>Joined</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (customer of customers(); track customer._id) {
+          <tr>
+            <td>{{ customer.name }}</td>
+            <td>{{ customer.email }}</td>
+            <td>{{ customer.phone }}</td>
+            <td>{{ customer.location || '—' }}</td>
+            <td>{{ customer.createdAt | date: 'dd MMM yyyy' }}</td>
+            <td>
+              <button class="view-btn" (click)="openDetail(customer)">View Details</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <div class="pagination">
+      <button [disabled]="page === 1" (click)="goToPage(page - 1)">← Prev</button>
+      <span>Page {{ page }} of {{ totalPages() }}</span>
+      <button [disabled]="page === totalPages()" (click)="goToPage(page + 1)">Next →</button>
+    </div>
+  }
+</main>
+
+<!-- ===================== Customer detail modal ===================== -->
+@if (activeCustomer(); as customer) {
+  <div class="modal-backdrop" (click)="closeDetail()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <button class="modal-close" (click)="closeDetail()" aria-label="Close">✕</button>
+
+      <div class="customer-header">
+        <div class="customer-avatar">{{ customer.name.charAt(0) }}</div>
+        <div>
+          <h3>{{ customer.name }}</h3>
+          <p class="modal-subtitle">Joined {{ customer.createdAt | date: 'dd MMM yyyy' }}</p>
+        </div>
+      </div>
+
+      <div class="detail-grid">
+        <div class="detail-block">
+          <span class="detail-label">Email</span>
+          <span class="detail-value">{{ customer.email }}</span>
+        </div>
+        <div class="detail-block">
+          <span class="detail-label">Phone</span>
+          <span class="detail-value">{{ customer.phone }}</span>
+        </div>
+        @if (customer.gender) {
+          <div class="detail-block">
+            <span class="detail-label">Gender</span>
+            <span class="detail-value">{{ customer.gender }}</span>
+          </div>
+        }
+        @if (customer.age) {
+          <div class="detail-block">
+            <span class="detail-label">Age</span>
+            <span class="detail-value">{{ customer.age }}</span>
+          </div>
+        }
+        @if (customer.location) {
+          <div class="detail-block">
+            <span class="detail-label">Location</span>
+            <span class="detail-value">{{ customer.location }}</span>
+          </div>
+        }
+      </div>
+
+      <hr class="modal-divider">
+
+      <h4>Order History</h4>
+
+      @if (loadingOrders()) {
+        <p class="hint">Loading orders…</p>
+      } @else if (customerOrders().length === 0) {
+        <p class="empty-state">No orders yet.</p>
+      } @else {
+        <div class="order-list">
+          @for (order of customerOrders(); track order._id) {
+            <div class="order-row">
+              <div class="order-main">
+                <span class="order-title">{{ order.garmentType }} — {{ order.tailorName }}</span>
+                <span class="order-sub">{{ order.expectedDelivery | date: 'dd MMM yyyy' }}</span>
+              </div>
+              <span class="status" [class]="statusClass(order.status)">{{ order.status }}</span>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+}

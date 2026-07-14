@@ -11,13 +11,13 @@ import { OrderList } from './features/order-list/order-list';
 import { CustomerProfile } from './features/profile/profile'; // adjust path if placed elsewhere
 import { MeasurementChoiceModal } from './features/measurement-choice-modal/measurement-choice-modal'; // adjust path if placed elsewhere
 import {AdminDashboard} from './features/admin/dashboard/dashboard'; 
-
+import { Measurements } from './features/measurement/measurement';
 import { AdminOrderList } from './features/admin/order-list/order-list';
 import {TailorDashboard} from './features/tailor/dashboard/dashboard';
 import { TailorPortfolio } from './features/tailor/tailor-portfolio/tailor-portfolio';
 
 import { AdminTailorList } from './features/admin/admin-tailor-list/admin-tailor-list'; // adjust path
-
+import { AdminCustomerList } from './features/admin/customer-list/customer-list';
 
 
 export const routes: Routes = [
@@ -72,7 +72,7 @@ export const routes: Routes = [
 },
 {
   path: 'customer/measurements',
-  component: MeasurementChoiceModal,
+  component: Measurements,
 },
 
  {
@@ -99,6 +99,12 @@ export const routes: Routes = [
 {
   path: 'admin/tailors',
   component: AdminTailorList,
+},
+
+
+{
+  path: 'admin/customers',
+  component: AdminCustomerList,
 },
 
 ];

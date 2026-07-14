@@ -45,6 +45,7 @@
   </section>
 
   <!-- ===================== Shop by category carousel ===================== -->
+<!-- ===================== Shop by category carousel ===================== -->
 <section class="category-section">
   <div class="section-head">
     <span class="eyebrow">Browse by category</span>
@@ -60,24 +61,23 @@
           <a class="category-card" [routerLink]="['/customer/tailors']" [queryParams]="{ category: cat.name }">
             <div class="category-image-wrap">
               <img [src]="cat.image" [alt]="cat.name" loading="lazy">
-              <div class="category-overlay"></div>
-              <span class="category-label">{{ cat.name }}</span>
             </div>
+            <span class="category-label">{{ cat.name }}</span>
           </a>
         }
         @for (cat of categories; track cat.name + '-b') {
           <a class="category-card" [routerLink]="['/customer/tailors']" [queryParams]="{ category: cat.name }" aria-hidden="true">
             <div class="category-image-wrap">
               <img [src]="cat.image" [alt]="cat.name" loading="lazy">
-              <div class="category-overlay"></div>
-              <span class="category-label">{{ cat.name }}</span>
             </div>
+            <span class="category-label">{{ cat.name }}</span>
           </a>
         }
       </div>
     </div>
 
-    <button class="carousel-nav nav-right" (click)="scrollCategories('right')" aria-label="Scroll right">›</button>
+    <!-- <button class="carousel-nav nav-right" (click)="scrollCategories('right')" aria-label="Scroll right">›</button> -->
+ <button class="category-nav nav-right" (click)="scrollCategories('right')" aria-label="Scroll right">›</button>
   </div>
 </section>
 

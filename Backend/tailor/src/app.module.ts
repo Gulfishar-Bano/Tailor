@@ -10,6 +10,11 @@ import { AdminModule } from './admin/admin.module';
 import { ReviewModule } from './review/review.module';
 import { AdminOrderModule } from './admin-order/admin-order.module';
 
+
+import { AdminCustomersModule } from './admin-customers/admin-customers.module';
+import { DoorstepModule } from './doorstep/doorstep.module';
+import { MeasurementModule } from './measurement/measurement.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -24,6 +29,9 @@ import { AdminOrderModule } from './admin-order/admin-order.module';
     AdminModule,
     ReviewModule,
     AdminOrderModule,
+    AdminCustomersModule,
+    DoorstepModule,
+    MeasurementModule,
   ],
   providers: [],
 })

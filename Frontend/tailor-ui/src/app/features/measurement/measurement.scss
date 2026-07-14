@@ -1,0 +1,84 @@
+// measurement.scss
+:host {
+  display: block;
+  font-family: 'Work Sans', -apple-system, sans-serif;
+}
+
+.measurements-page {
+  min-height: 100vh;
+  background: #FAF7F2;
+  padding: 3rem 1.5rem;
+}
+
+.measurements-container {
+  max-width: 640px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 12px 30px -18px rgba(0,0,0,0.2);
+}
+
+h2 {
+  margin: 0 0 0.4rem;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.6rem;
+}
+
+.subtitle {
+  margin: 0 0 2rem;
+  color: #777;
+  font-size: 0.9rem;
+}
+
+.measurement-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  &.full-width { grid-column: 1 / -1; }
+
+  label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #555;
+  }
+
+  input, textarea {
+    padding: 0.65rem 0.9rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-family: inherit;
+
+    &:focus { outline: none; border-color: #C98A2B; }
+  }
+
+  textarea { min-height: 70px; resize: vertical; }
+}
+
+.error-message { color: #b91c1c; font-size: 0.85rem; margin: 0.5rem 0; }
+.success-message { color: #16a34a; font-size: 0.85rem; margin: 0.5rem 0; }
+.info-text { color: #777; font-size: 0.9rem; }
+
+.save-btn {
+  width: 100%;
+  padding: 0.85rem;
+  margin-top: 1rem;
+  border: none;
+  border-radius: 999px;
+  background: #C98A2B;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
+  &:hover:not(:disabled) { background: #7C2D3A; }
+}

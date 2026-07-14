@@ -74,7 +74,9 @@
             <textarea formControlName="notes" placeholder="Any specific instructions..."></textarea>
           </div>
 
-          <button type="submit" class="submit-btn">Request Doorstep Visit</button>
+          <button type="submit" class="submit-btn" [disabled]="submitting()">
+  {{ submitting() ? 'Sending…' : 'Request Doorstep Visit' }}
+</button>
         </form>
       }
 
