@@ -18,4 +18,7 @@ export class DoorstepService {
   findAll() {
     return this.model.find().populate('customerId', 'name phone').sort({ createdAt: -1 }).lean();
   }
+   getLatestByCustomer(customerId: string) {
+    return this.model.findOne({ customerId }).sort({ createdAt: -1 }).lean();
+  }
 }

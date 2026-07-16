@@ -22,11 +22,11 @@
 .admin-content {
   max-width: 1200px;
   margin: 0 auto;
-  margin-top: 64px; // matches admin-navbar's fixed topbar height — prevents overlap
+  margin-top: 64px;
   padding: 2.5rem 2rem 4rem;
 
   @media (max-width: 860px) {
-    margin-top: 64px; // topbar stays visible on mobile too
+    margin-top: 64px;
   }
 }
 
@@ -135,7 +135,7 @@
 }
 
 // ---------------------------------------------------------------------------
-// Table — always horizontally scrollable so columns never get clipped
+// Table
 // ---------------------------------------------------------------------------
 
 .orders-table-wrapper {
@@ -147,7 +147,7 @@
 
 .orders-table {
   width: 100%;
-  min-width: 1050px; // forces scroll instead of squeezing/clipping columns
+  min-width: 1050px;
   border-collapse: separate;
   border-spacing: 0;
 
@@ -273,7 +273,7 @@
 }
 
 // ---------------------------------------------------------------------------
-// Order Details / Status Update modal
+// Order Details / Measurements / Status Update modal
 // ---------------------------------------------------------------------------
 
 .modal-backdrop {
@@ -361,7 +361,7 @@
 
 .modal select { cursor: pointer; }
 
-// --- Detail grid (used inside the order details modal) ---
+// --- Detail grid ---
 
 .detail-grid {
   display: grid;
@@ -417,6 +417,35 @@
   border: 1px solid var(--border);
 }
 
+// --- Measurements (inside the same modal now) ---
+
+.measurements-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem 1rem;
+  margin: 0.6rem 0 0.5rem;
+
+  span {
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 0.55rem 0.8rem;
+    background: var(--page-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--ink);
+  }
+}
+
+.measurement-notes {
+  margin: 0.75rem 0 0;
+  padding: 0.75rem;
+  background: var(--accent-light);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--ink);
+}
+
 .final-price {
   margin: 1rem 0 0;
   padding: 0.7rem;
@@ -456,26 +485,48 @@
   .admin-content { padding: 1.5rem 1rem 3rem; }
   .filters-bar { flex-direction: column; }
   .detail-grid { grid-template-columns: 1fr; }
+  .measurements-grid { grid-template-columns: 1fr; }
 }
 
-.measurements-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.5rem 1rem;
-  margin-top: 0.4rem;
+.measurement-source-tag {
+  display: inline-block;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  margin-bottom: 0.6rem;
 
-  span {
-    font-size: 0.85rem;
-    color: var(--ink);
-    padding: 0.4rem 0.7rem;
-    background: var(--page-bg);
-    border-radius: 6px;
-  }
+  &.manual { background: #e0e7ff; color: #4338ca; }
+  &.doorstep { background: #fef3c7; color: #92400e; }
 }
 
-.measurement-notes {
-  margin: 0.6rem 0 0;
-  font-size: 0.82rem;
-  font-style: italic;
+.doorstep-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.doorstep-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background: var(--page-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.doorstep-label {
+  font-size: 0.72rem;
+  font-weight: 600;
   color: var(--ink-soft);
+}
+
+.doorstep-value {
+  font-size: 0.85rem;
+  color: var(--ink);
+  text-align: right;
+}
+.measurement-source-tag.stacked {
+  margin-top: 1rem;
 }

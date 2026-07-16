@@ -10,8 +10,8 @@ export interface AdminOrdersResponse {
 
 export interface AdminOrder {
   _id: string;
-  customerId: { name: string; email: string; phone: string } | string | null;
-  tailorId: { name: string; phone?: string; city?: string; specialization?: string } | string | null;
+  customerId: { _id: string; name: string; email: string; phone: string } | string | null;
+  tailorId: { _id?: string; name: string; phone?: string; city?: string; specialization?: string } | string | null;
   garmentType: string;
   fabricColor?: string;
   description?: string;
@@ -34,12 +34,13 @@ export interface AdminOrder {
     notes?: string;
   } | null;
 }
+
 @Injectable({
   providedIn: 'root',
 })
 export class OrderService {
 
-  private baseUrl = 'http://localhost:3000'; // your backend URL
+  private baseUrl = 'http://localhost:3000';
 
   constructor(private http: HttpClient) {}
 
@@ -107,7 +108,8 @@ export class OrderService {
       adminMargin, adminNotes,
     });
   }
-requestDoorstepMeasurement(payload: {
+
+  requestDoorstepMeasurement(payload: {
     customerId: string;
     address: string;
     preferredDate: string;

@@ -5,6 +5,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { AddMarginDto } from '../order/dto/add-margin.dto'; // adjust path
 import { Order } from '../order/schema/order.schema'; // adjust path to your actual schema
+import { Measurement } from '../measurement/schemas/measurement.schema'; // ADD THIS
+
 
 interface FindAllParams {
   status?: string;
@@ -15,7 +17,9 @@ interface FindAllParams {
 
 @Injectable()
 export class AdminOrdersService {
-  constructor(@InjectModel(Order.name) private orderModel: Model<Order>) {}
+  constructor(@InjectModel(Order.name) private orderModel: Model<Order>,
+ @InjectModel(Measurement.name) private measurementModel: Model<Measurement>
+) {}
 
   async findAll({ status, search, page, limit }: FindAllParams) {
     const filter: any = {};
@@ -36,8 +40,8 @@ export class AdminOrdersService {
     const [orders, total] = await Promise.all([
       this.orderModel
         .find(filter)
-        .populate('customerId', 'name email phone') // adjust field names to your schema
-          .populate('tailorId', 'name phone city specialization')
+        .populate('customerId', 'name email phone')
+        .populate('tailorId', 'name phone city specialization')
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
@@ -45,8 +49,22 @@ export class AdminOrdersService {
       this.orderModel.countDocuments(filter),
     ]);
 
+    // ADD THIS BLOCK — attach each customer's saved measurements
+    const ordersWithMeasurements = await Promise.all(
+      orders.map(async (order: any) => {
+        if (!order.customerId?._id) {
+          return { ...order, measurements: null };
+        }
+        const measurements = await this.measurementModel
+          .findOne({ customerId: order.customerId._id })
+          .lean();
+        return { ...order, measurements: measurements ?? null };
+      }),
+    );
+    console.log('Sample order measurements check:', ordersWithMeasurements[0]?.customerId, ordersWithMeasurements[0]?.measurements);
+
     return {
-      orders,
+      orders: ordersWithMeasurements, // CHANGED from `orders`
       total,
       page,
       totalPages: Math.ceil(total / limit),

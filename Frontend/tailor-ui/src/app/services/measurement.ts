@@ -26,6 +26,7 @@ export class MeasurementService {
   }
 
   getByCustomer(customerId: string) {
+    console.log("getting called")
     return this.http.get<MeasurementData | null>(`${this.baseUrl}/measurements/customer/${customerId}`);
   }
 }

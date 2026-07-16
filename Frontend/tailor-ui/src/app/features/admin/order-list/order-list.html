@@ -86,7 +86,7 @@
   }
 </main>
 
-<!-- Order Details + Manual Status Update modal -->
+<!-- Order Details + Measurements + Manual Status Update — all in ONE modal -->
 @if (activeOrder(); as order) {
   <div class="modal-backdrop" (click)="closeOrderDetails()">
     <div class="modal modal-large" (click)="$event.stopPropagation()">
@@ -150,36 +150,60 @@
         </div>
       }
 
-       @if (order.measurements) {
-        <div class="detail-block full-width">
-          <span class="detail-label">Customer's Saved Measurements</span>
-          <div class="measurements-grid">
-            @if (order.measurements.chest) { <span>Chest: {{ order.measurements.chest }}"</span> }
-            @if (order.measurements.waist) { <span>Waist: {{ order.measurements.waist }}"</span> }
-            @if (order.measurements.hip) { <span>Hip: {{ order.measurements.hip }}"</span> }
-            @if (order.measurements.shoulder) { <span>Shoulder: {{ order.measurements.shoulder }}"</span> }
-            @if (order.measurements.length) { <span>Length: {{ order.measurements.length }}"</span> }
-            @if (order.measurements.sleeveLength) { <span>Sleeve: {{ order.measurements.sleeveLength }}"</span> }
-            @if (order.measurements.neck) { <span>Neck: {{ order.measurements.neck }}"</span> }
-            @if (order.measurements.inseam) { <span>Inseam: {{ order.measurements.inseam }}"</span> }
-          </div>
-          @if (order.measurements.notes) {
-            <p class="measurement-notes">"{{ order.measurements.notes }}"</p>
-          }
-        </div>
-      } @else {
-        <div class="detail-block full-width">
-          <span class="detail-label">Customer's Saved Measurements</span>
-          <span class="detail-value">No measurements on file yet.</span>
-        </div>
-      }
+      <!-- Measurements, fetched automatically when this modal opens -->
+   <div class="detail-block full-width">
+  <span class="detail-label">Measurement Details</span>
 
-      <!-- @if (order.adminNotes) {
-        <div class="detail-block full-width">
-          <span class="detail-label">Previous Admin Notes</span>
-          <span class="detail-value">{{ order.adminNotes }}</span>
-        </div>
-      } -->
+  @if (loadingMeasurements() || loadingDoorstep()) {
+    <span class="detail-value">Fetching measurement details…</span>
+  }
+
+  @if (!loadingMeasurements() && !loadingDoorstep() && !measurementData() && !doorstepData()) {
+    <span class="detail-value">No measurements on file yet — customer hasn't entered measurements or requested a doorstep visit.</span>
+  }
+
+  @if (measurementData()) {
+    <div class="measurement-source-tag manual">✍️ Entered Manually</div>
+    <div class="measurements-grid">
+      @if (measurementData()!.chest) { <span>Chest: {{ measurementData()!.chest }}"</span> }
+      @if (measurementData()!.waist) { <span>Waist: {{ measurementData()!.waist }}"</span> }
+      @if (measurementData()!.hip) { <span>Hip: {{ measurementData()!.hip }}"</span> }
+      @if (measurementData()!.shoulder) { <span>Shoulder: {{ measurementData()!.shoulder }}"</span> }
+      @if (measurementData()!.length) { <span>Length: {{ measurementData()!.length }}"</span> }
+      @if (measurementData()!.sleeveLength) { <span>Sleeve: {{ measurementData()!.sleeveLength }}"</span> }
+      @if (measurementData()!.neck) { <span>Neck: {{ measurementData()!.neck }}"</span> }
+      @if (measurementData()!.inseam) { <span>Inseam: {{ measurementData()!.inseam }}"</span> }
+    </div>
+    @if (measurementData()!.notes) {
+      <p class="measurement-notes">"{{ measurementData()!.notes }}"</p>
+    }
+  }
+
+  @if (doorstepData()) {
+    <div class="measurement-source-tag doorstep" [class.stacked]="measurementData()">🚪 Doorstep Service Requested</div>
+    <div class="doorstep-details">
+      <div class="doorstep-row">
+        <span class="doorstep-label">Address</span>
+        <span class="doorstep-value">{{ doorstepData()!.address }}</span>
+      </div>
+      <div class="doorstep-row">
+        <span class="doorstep-label">Preferred Date</span>
+        <span class="doorstep-value">{{ doorstepData()!.preferredDate | date: 'dd MMM yyyy' }}</span>
+      </div>
+      <div class="doorstep-row">
+        <span class="doorstep-label">Preferred Time</span>
+        <span class="doorstep-value">{{ doorstepData()!.preferredTime }}</span>
+      </div>
+      <div class="doorstep-row">
+        <span class="doorstep-label">Visit Status</span>
+        <span class="status" [class]="statusClass(doorstepData()!.status || 'Pending')">{{ doorstepData()!.status || 'Pending' }}</span>
+      </div>
+    </div>
+    @if (doorstepData()!.notes) {
+      <p class="measurement-notes">"{{ doorstepData()!.notes }}"</p>
+    }
+  }
+</div>
 
       <hr class="modal-divider">
 

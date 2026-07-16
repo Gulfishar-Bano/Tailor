@@ -4,9 +4,15 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AdminOrdersController } from './admin-order.controller';
 import { AdminOrdersService } from './admin-order.service';
 import { Order, OrderSchema } from '../order/schema/order.schema';
+import { Measurement, MeasurementSchema } from '../measurement/schemas/measurement.schema'; // ADD THIS
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Order.name, schema: OrderSchema }])],
+  imports: [
+    MongooseModule.forFeature([
+      { name: Order.name, schema: OrderSchema },
+      { name: Measurement.name, schema: MeasurementSchema }, // ADD THIS
+    ]),
+  ],
   controllers: [AdminOrdersController],
   providers: [AdminOrdersService],
 })

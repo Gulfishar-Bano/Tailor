@@ -1,8 +1,9 @@
-// order-list.ts
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { OrderService, AdminOrder } from '../../../services/order';
+import { MeasurementService, MeasurementData } from '../../../services/measurement';
+import { DoorstepService, DoorstepRequestData } from '../../../services/doorstep'; // ADD THIS
 import { AdminNavbar } from '../../admin-navbar/admin-navbar';
 
 @Component({
@@ -14,6 +15,8 @@ import { AdminNavbar } from '../../admin-navbar/admin-navbar';
 })
 export class AdminOrderList implements OnInit {
   private orderService = inject(OrderService);
+  private measurementService = inject(MeasurementService);
+  private doorstepService = inject(DoorstepService); // ADD THIS
 
   orders = signal<AdminOrder[]>([]);
   loading = signal(true);
@@ -37,11 +40,18 @@ export class AdminOrderList implements OnInit {
     'Rejected by Tailor',
   ];
 
-  // --- Details / status update modal state ---
   activeOrder = signal<AdminOrder | null>(null);
   selectedStatus = signal('');
   statusNotes = signal('');
   submitting = signal(false);
+
+  measurementData = signal<MeasurementData | null>(null);
+  loadingMeasurements = signal(false);
+  measurementError = signal('');
+
+  // --- NEW: doorstep request state ---
+  doorstepData = signal<DoorstepRequestData | null>(null);
+  loadingDoorstep = signal(false);
 
   ngOnInit(): void {
     this.fetchOrders();
@@ -108,18 +118,56 @@ export class AdminOrderList implements OnInit {
     return '';
   }
 
-  // ------------------------------------------------------------------
-  // View details + manually update status after calling the tailor
-  // ------------------------------------------------------------------
-
   openOrderDetails(order: AdminOrder): void {
     this.activeOrder.set(order);
     this.selectedStatus.set(order.status);
     this.statusNotes.set(order.adminNotes ?? '');
+
+    this.measurementData.set(null);
+    this.measurementError.set('');
+    this.doorstepData.set(null);
+
+    const customerId = typeof order.customerId === 'object' && order.customerId !== null
+      ? order.customerId._id
+      : order.customerId;
+
+    if (!customerId) {
+      this.measurementError.set('No customer linked to this order.');
+      return;
+    }
+
+    // fetch measurements
+    this.loadingMeasurements.set(true);
+    this.measurementService.getByCustomer(customerId).subscribe({
+      next: (data) => {
+        this.measurementData.set(data);
+        this.loadingMeasurements.set(false);
+      },
+      error: (err: any) => {
+        this.measurementError.set(err.error?.message ?? 'No measurements found for this customer.');
+        this.loadingMeasurements.set(false);
+      },
+    });
+
+    // fetch doorstep request, independently
+    this.loadingDoorstep.set(true);
+    this.doorstepService.getByCustomer(customerId).subscribe({
+      next: (data) => {
+        this.doorstepData.set(data);
+        this.loadingDoorstep.set(false);
+      },
+      error: () => {
+        this.doorstepData.set(null);
+        this.loadingDoorstep.set(false);
+      },
+    });
   }
 
   closeOrderDetails(): void {
     this.activeOrder.set(null);
+    this.measurementData.set(null);
+    this.measurementError.set('');
+    this.doorstepData.set(null);
   }
 
   submitStatusUpdate(): void {
